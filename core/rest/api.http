@@ -1,0 +1,63 @@
+POST http://localhost:8081/v1/book
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "asdasda"
+}
+
+###
+
+GET http://localhost:8081/v1/book
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+
+###
+
+GET http://localhost:8081/v1/bookmark
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+###
+
+POST http://localhost:8081/v1/bookmark
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "asdasdxxa",
+  "bookId": "17",
+  "tags": ["aaa","1","kkkk"]
+}
+
+###
+
+POST http://localhost:8081/v1/bookmark/19
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+{
+"name": "zzzzzz",
+"bookId": "17",
+"tags": ["aaa","1","kkkk"]
+}
+
+###
+
+GET http://localhost:8081/v1/tag
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
+
+###
+
+GET http://localhost:8081/v1/search/live?s=kkk
+Authorization: Basic dTE6MTIz
+Content-Type: application/json
+Accept: application/json
