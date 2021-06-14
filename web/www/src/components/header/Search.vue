@@ -2,7 +2,7 @@
 
   <div class="container">
     <form v-on:submit.prevent="live">
-      <input class="form-control" id="search" type="search" placeholder="Search..."
+      <input class="form-control" id="search" type="search" placeholder="Search..." autocomplete="off"
              v-on:keyup="live"
              v-on:change="live"
              v-model="search">
@@ -16,10 +16,11 @@ export default {
   name: "Search",
   data() {
     return {
+      book: null,
       search: '',
-      minSearchLen: 2,
+      minSearchLen: 1,
       timer: null,
-      delay: 100,
+      delay: 150,
     }
   },
   methods: {
@@ -31,16 +32,12 @@ export default {
       }
 
       if (!this.search.length || this.search.length < this.minSearchLen) {
+        this.$parent.search = null;
         return;
       }
 
       this.timer = setTimeout(() => {
-        fetch('/v1/search/live?s=' + this._clean(this.search))
-            .then(res => res.json())
-            .then(res => {
-              this.$parent.searchResult(res);
-            });
-
+        this.$parent.search = this._clean(this.search);
       }, this.delay);
     },
     _clean: function (s) {

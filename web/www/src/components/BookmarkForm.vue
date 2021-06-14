@@ -33,7 +33,7 @@ import Multiselect from '@vueform/multiselect'
 
 export default {
   name: "BookForm",
-  components: {  Multiselect},
+  components: {Multiselect},
   props: {
     book: null,
     bookmark: null,
@@ -71,11 +71,12 @@ export default {
         return;
       }
 
-      let bookmark = this.bookmark ? this.bookmark : {id: null, bookId: this.book.id, name: '', body: null, tags: null};
-      bookmark.name = this.name;
-      bookmark.body = this.body
-      bookmark.tags = this.tags
-      console.log(this.tags)
+      let bookmark = {
+        bookId: this.bookmark ? this.bookmark.book.id : this.book.id,
+        name: this.name,
+        body: this.body,
+        tags: this.tags
+      };
 
       const requestOptions = {
         method: "POST",
@@ -83,7 +84,7 @@ export default {
         body: JSON.stringify(bookmark)
       };
 
-      fetch(bookmark.id ? '/v1/bookmark/' + bookmark.id : '/v1/bookmark', requestOptions)
+      fetch(this.bookmark ? '/v1/bookmark/' + this.bookmark.id : '/v1/bookmark', requestOptions)
           .then(res => res.json())
           .then(res => {
             if (this.afterSave) this.afterSave(res.data);

@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -31,7 +32,10 @@ public class Bookmark extends BaseEntity {
     private String body;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
+
+    @OneToOne(mappedBy = "bookmark", fetch = FetchType.LAZY)
+    private BookmarkSearchData searchData;
 
     @JsonIgnore
     @Getter

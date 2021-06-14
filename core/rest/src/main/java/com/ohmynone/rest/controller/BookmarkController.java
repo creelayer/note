@@ -9,7 +9,6 @@ import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.service.BookService;
 import com.ohmynone.rest.service.BookmarkService;
-import com.ohmynone.rest.service.SearchService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,20 +21,24 @@ import javax.validation.Valid;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
-    private final SearchService searchService;
     private final BookService bookService;
     private final BookmarkMapper mapper;
 
-    public BookmarkController(BookmarkService bookmarkService, SearchService searchService, BookService bookService, BookmarkMapper mapper) {
+    public BookmarkController(BookmarkService bookmarkService, BookService bookService, BookmarkMapper mapper) {
         this.bookmarkService = bookmarkService;
-        this.searchService = searchService;
         this.bookService = bookService;
         this.mapper = mapper;
     }
 
-    @GetMapping("")
-    Response<Page<BookmarkDTO>> index(@Valid BookmarkSearch filter, Pageable pageable, Response<Page<BookmarkDTO>> model) {
-        return model.setData(searchService.search(filter, pageable).map(mapper::map));
+    @GetMapping("list")
+    Response<Page<BookmarkDTO>> index(Pageable pageable, Response<Page<BookmarkDTO>> model) {
+        return model.setData(bookmarkService.list(pageable).map(mapper::map));
+    }
+
+    @GetMapping("list/{id}")
+    Response<Page<BookmarkDTO>> index(@PathVariable Long id, Pageable pageable, Response<Page<BookmarkDTO>> model) {
+        Book book = bookService.findOne(id).orElseThrow();
+        return model.setData(bookmarkService.list(book, pageable).map(mapper::map));
     }
 
     @GetMapping("{id}")
@@ -50,7 +53,7 @@ public class BookmarkController {
                                          Response<BookmarkDTO> model) {
         Book book = bookService.findOne(dto.getBookId()).orElseThrow();
 
-        Bookmark bookmark = bookmarkService.addBookmarkByDto(book, dto);
+        Bookmark bookmark = bookmarkService.addBookmark(book, dto);
         return model.setData(mapper.map(bookmark));
     }
 
@@ -60,12 +63,12 @@ public class BookmarkController {
                                          @AuthenticationPrincipal CurrentUserDetails userDetails,
                                          Response<BookmarkDTO> model) {
         Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
-        bookmark = bookmarkService.updateBookmarkByDto(bookmark, dto);
+        bookmark = bookmarkService.updateBookmark(bookmark, dto);
         return model.setData(mapper.map(bookmark));
     }
 
     @DeleteMapping("/{id}")
-    Response<BookmarkDTO> updateBookmark(@PathVariable Long id,
+    Response<BookmarkDTO> deleteBookmark(@PathVariable Long id,
                                          @AuthenticationPrincipal CurrentUserDetails userDetails,
                                          Response<BookmarkDTO> model) {
         Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();

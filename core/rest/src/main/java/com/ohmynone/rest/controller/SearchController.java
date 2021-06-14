@@ -27,6 +27,7 @@ public class SearchController {
     Response<Page<SearchResult>> index(@Valid BookmarkSearch filter,
                                        Pageable pageable,
                                        Response<Page<SearchResult>> model) {
+
         return model.setData(searchService.search(filter, pageable).map(mapper::map));
     }
 }
