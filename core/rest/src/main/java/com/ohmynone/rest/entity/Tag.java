@@ -30,4 +30,7 @@ public class Tag extends BaseEntity {
 
     @Basic
     private String name;
+
+    @Column(length = 6)
+    private String color;
 }

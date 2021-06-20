@@ -1,6 +1,7 @@
 package com.ohmynone.rest.mapper;
 
 import com.ohmynone.rest.dto.SearchResult;
+import com.ohmynone.rest.dto.TagDTO;
 import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.entity.Tag;
 import org.mapstruct.Mapper;
@@ -15,7 +16,5 @@ public interface SearchMapper {
 
     List<SearchResult> map(List<Bookmark> list);
 
-    default String map(Tag tag){
-        return tag.getName();
-    }
+   // TagDTO map(Tag entity);
 }

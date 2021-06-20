@@ -18,6 +18,6 @@ public class SearchResult {
     @Length(max = 255)
     private String name;
 
-    private Set<String> tags;
+    private Set<TagDTO> tags;
 
 }

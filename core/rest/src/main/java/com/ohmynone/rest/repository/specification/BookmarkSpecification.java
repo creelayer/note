@@ -35,6 +35,7 @@ public class BookmarkSpecification {
                 specification = specification.and(search(filter.getNormalizedText()));
             }
 
+            query.orderBy(builder.desc(root.get("id"))); //TODO order by weight
             return specification.toPredicate(root, query, builder);
         };
     }

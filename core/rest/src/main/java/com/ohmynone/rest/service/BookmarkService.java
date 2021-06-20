@@ -1,6 +1,7 @@
 package com.ohmynone.rest.service;
 
 import com.ohmynone.rest.dto.BookmarkDTO;
+import com.ohmynone.rest.dto.TagDTO;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.entity.BookmarkSearchData;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BookmarkService {
@@ -60,7 +63,8 @@ public class BookmarkService {
         Bookmark bookmark = mapper.map(dto);
         bookmark.setBook(book);
         if (dto.getTags() != null) {
-            bookmark.setTags(tagService.addUserTags(book.getUser(), dto.getTags()));
+            Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
+            bookmark.setTags(tagService.addTags(book.getUser(), names));
         }
         save(bookmark);
         bookmarkSearchDataService.index(bookmark);
@@ -69,7 +73,8 @@ public class BookmarkService {
 
     public Bookmark updateBookmark(Bookmark bookmark, BookmarkDTO dto) {
         bookmark = mapper.map(dto, bookmark);
-        bookmark.setTags(tagService.addUserTags(bookmark.getBook().getUser(), dto.getTags()));
+        Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
+        bookmark.setTags(tagService.addTags(bookmark.getBook().getUser(), names));
         save(bookmark);
         bookmarkSearchDataService.index(bookmark);
         return bookmark;

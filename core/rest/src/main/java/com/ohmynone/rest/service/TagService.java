@@ -5,6 +5,7 @@ import com.ohmynone.rest.entity.User;
 import com.ohmynone.rest.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,11 +17,19 @@ public class TagService {
         this.tagRepository = tagRepository;
     }
 
-    public Set<Tag> findAllByUser(User user) {
-        return tagRepository.findAllByUserId(user.getId());
+    public Optional<Tag> findOne(Long id) {
+        return tagRepository.findById(id);
     }
 
-    public Set<Tag> addUserTags(User user, Set<String> names) {
+    public Set<Tag> findAllByUser(User user) {
+        return tagRepository.findAllByUserIdOrderByIdDesc(user.getId());
+    }
+
+    public Tag save(Tag book) {
+        return tagRepository.save(book);
+    }
+
+    public Set<Tag> addTags(User user, Set<String> names) {
 
         Set<Tag> tags = tagRepository.findAllByUserIdAndNameIn(user.getId(), names);
 
@@ -30,7 +39,7 @@ public class TagService {
 
         for (String name : names) {
             Tag tag = new Tag(user, name);
-            tags.add(tagRepository.save(tag));
+            tags.add(save(tag));
         }
 
         return tags;

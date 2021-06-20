@@ -1,29 +1,40 @@
 <template>
 
 
-
   <div class="d-grid gap-2">
-    <button v-on:click="showCreateFrom = true" class="btn btn-light mb-2" type="button">+ Add</button>
+    <button v-on:click="showCreateFrom = true" :disabled="!book" class="btn btn-light mb-2" type="button" >+ Add</button>
   </div>
-  <BookmarkForm v-if="showCreateFrom" :after-save="afterSave" :book="book"/>
+
+  <BookmarkForm v-if="showCreateFrom" :after-save="afterSave" :book="book" :is-inline="true"/>
 
 
   <div class="" :key="bookmark.id" v-for="(bookmark, index) in bookmarks">
-    <div v-if="editIndex!==index" class="border rounded-3 shadow-sm p-2 mb-2 ">
-      <a v-on:click="view(bookmark)">{{ bookmark.name }}</a>
-      <ul>
-        <li :key="tag" v-for="tag in bookmark.tags">
-          {{ tag }}
-        </li>
-      </ul>
+    <div v-if="editIndex!==index" v-on:click="view(bookmark)"
+         class="border rounded-3 shadow-sm p-2 mb-2 context-menu bookmark">
+      <a>{{ bookmark.name }}</a>
+
+      <div class="info">
+        <ul class="tags">
+
+          <li
+              class="tag" style="color: #60717D">
+            {{ bookmark.book.name }}
+          </li>
+
+          <li :key="tag" v-for="tag in bookmark.tags" :style="'background-color:#'+tag.color"
+              class="tag ">
+            {{ tag.name }}
+          </li>
+        </ul>
+        <i class="bi bi-eye float-end"></i>
+      </div>
 
 
       <div v-if="editIndex!==index" class="dropdown without-caret float-end">
-        <button class="btn btn-sm dropdown-toggle" type="button"  data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#" v-on:click="editIndex = index">Edit</a></li>
           <li><a class="dropdown-item" href="#" v-on:click="remove(book)">Delete</a></li>
         </ul>
       </div>
@@ -37,9 +48,31 @@
 
 </template>
 
-<script>
+<style scoped>
 
-import BookmarkForm from "@/components/BookmarkForm";
+.bookmark {
+  display: block;
+  cursor: pointer;
+  min-height: 70px;
+  font-size: 0.85em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.info {
+
+}
+
+.bi-eye {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  opacity: 0.5;
+}
+
+</style>
+
+<script>
+import BookmarkForm from "@/components/workTabke/BookmarkForm";
 
 export default {
   name: "Bookmarks",
@@ -94,7 +127,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

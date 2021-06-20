@@ -24,7 +24,7 @@ public interface BookmarkMapper {
 
     List<BookmarkDTO> map(List<Bookmark> list);
 
-    default String map(Tag tag){
-        return tag.getName();
-    }
+//    default String map(Tag tag){
+//        return tag.getName();
+//    }
 }

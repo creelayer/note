@@ -44,6 +44,7 @@ public class BookmarkController {
     @GetMapping("{id}")
     Response<BookmarkDTO> index(@PathVariable Long id, Response<BookmarkDTO> model) {
         Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
+        var a = mapper.map(bookmark);
         return model.setData(mapper.map(bookmark));
     }
 

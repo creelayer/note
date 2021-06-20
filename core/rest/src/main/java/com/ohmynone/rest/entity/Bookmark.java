@@ -39,7 +39,6 @@ public class Bookmark extends BaseEntity {
 
     @JsonIgnore
     @Getter
-    @CreationTimestamp
     @Column(columnDefinition = "timestamp default null")
     protected LocalDateTime deletedAt;
 }

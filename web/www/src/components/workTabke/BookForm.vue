@@ -1,16 +1,20 @@
 <template>
-  <div>
+  <div class="edit">
     <div v-if="errors.length">
       <ul>
         <li v-bind:key="error" v-for="error in errors">{{ error }}</li>
       </ul>
     </div>
-    <div class="mb-3">
+    <div >
       <input v-model="name" type="text" class="form-control" placeholder="Enter book name">
-      <button type="submit" class="btn btn-primary" v-on:click="submit">Save</button>
+      <button type="submit" class="btn btn-primary btn-sm mt-1" v-on:click="submit"><i class="bi bi-check2"></i></button>
     </div>
   </div>
 </template>
+
+<style scoped>
+
+</style>
 
 <script>
 export default {
@@ -57,7 +61,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -17,11 +17,13 @@ public class BookmarkDTO {
     @NotNull
     private Long bookId;
 
+    private BookDTO book;
+
     @NotBlank
     @Length(max = 255)
     private String name;
 
     private String body;
 
-    private Set<String> tags;
+    private Set<TagDTO> tags;
 }

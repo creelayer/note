@@ -1,31 +1,43 @@
 <template>
-  <div>
+  <div class="edit">
     <div v-if="errors.length">
       <ul>
         <li v-bind:key="error" v-for="error in errors">{{ error }}</li>
       </ul>
     </div>
-    <div class="mb-3">
-      <input v-model="name" type="text" class="form-control" placeholder="Enter book name">
 
-      <Multiselect
-          v-model="tags"
-          :options="allTags"
-          :mode="'tags'"
-          :searchable="true"
-          :createTag="true"
-          :valueProp="'name'"
-          :label="'name'"
-      />
+    <form class="mb-3">
+      <input v-model="name" type="text" class="form-control" placeholder="Enter bookmark name" v-if="isInline">
+      <div class="mb-3" v-if="!isInline">
+        <input v-model="name" type="text" class="form-control" placeholder="Enter bookmark name">
+      </div>
+      <div class="mb-3" v-if="!isInline">
+        <Multiselect
+            v-model="tags"
+            :options="allTags"
+            :mode="'tags'"
+            :searchable="true"
+            :createTag="true"
+            :valueProp="'name'"
+            :label="'name'"
+        />
+      </div>
+      <div class="mb-3" v-if="!isInline">
+        <textarea v-model="body" class="form-control" placeholder="Enter book body" rows="10"/>
+      </div>
+      <button type="submit" class="btn-primary btn-sm mt-1" v-on:click="submit"><i class="bi bi-check2"></i></button>
+
+    </form>
 
 
-      <textarea v-model="body" v-if="showBodyForm === true" class="form-control" placeholder="Enter book body"/>
-      <button type="submit" class="btn btn-primary" v-on:click="submit">Save</button>
-    </div>
   </div>
 </template>
 
-<style src="@vueform/multiselect/themes/default.css"></style>
+<style src="../../../node_modules/@vueform/multiselect/themes/default.css"></style>
+<style scoped>
+
+
+</style>
 <script>
 
 import Multiselect from '@vueform/multiselect'
@@ -38,8 +50,7 @@ export default {
     book: null,
     bookmark: null,
     afterSave: null,
-    showBodyForm: null,
-    showTagForm: null
+    isInline: null
   },
   created() {
     this.fetchTags();
@@ -48,7 +59,7 @@ export default {
     return {
       name: this.bookmark ? this.bookmark.name : null,
       body: this.bookmark ? this.bookmark.body : null,
-      tags: this.bookmark ? this.bookmark.tags : null,
+      tags: this.bookmark ? this.bookmark.tags.map(v => v.name) : null,
       errors: [],
       allTags: [],
     }
@@ -72,7 +83,7 @@ export default {
       }
 
       let bookmark = {
-        bookId: this.bookmark ? this.bookmark.book.id : this.book.id,
+        bookId: this.bookmark ? this.bookmark.bookId : this.book.id,
         name: this.name,
         body: this.body,
         tags: this.tags
