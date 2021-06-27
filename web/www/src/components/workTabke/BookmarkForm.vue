@@ -12,40 +12,29 @@
         <input v-model="name" type="text" class="form-control" placeholder="Enter bookmark name">
       </div>
       <div class="mb-3" v-if="!isInline">
-        <Multiselect
-            v-model="tags"
-            :options="allTags"
-            :mode="'tags'"
-            :searchable="true"
-            :createTag="true"
-            :valueProp="'name'"
-            :label="'name'"
-        />
+
       </div>
       <div class="mb-3" v-if="!isInline">
         <textarea v-model="body" class="form-control" placeholder="Enter book body" rows="10"/>
       </div>
-      <button type="submit" class="btn-primary btn-sm mt-1" v-on:click="submit"><i class="bi bi-check2"></i></button>
+      <button type="submit" class="btn-primary btn-sm mt-1" v-on:click="submit">Save</button>
 
     </form>
 
 
   </div>
 </template>
-
-<style src="../../../node_modules/@vueform/multiselect/themes/default.css"></style>
 <style scoped>
 
 
 </style>
 <script>
 
-import Multiselect from '@vueform/multiselect'
 
 
 export default {
   name: "BookForm",
-  components: {Multiselect},
+  components: {},
   props: {
     book: null,
     bookmark: null,

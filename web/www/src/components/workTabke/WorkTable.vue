@@ -84,34 +84,10 @@ export default {
   display: none;
 }
 
-.tags {
-  margin: 10px 1px;
-  padding: 0;
-  position: relative;
-  display: block;
-  overflow: hidden;
-  list-style: none;
-}
-
-.tags .tag {
-  margin-right: 6px;
-  font-weight: normal;
-  background-color: #e5e4e4;
-  float: left;
-  padding: 1px 6px;
-  color: #FFFFFF;;
-  font-size: 11px;
-  border-radius: 8px;
-}
-
 .context-menu .dropdown-item {
   font-size: 0.9em;
 }
 
-.multiselect-tag {
-  background: #e5e4e4;
-  color: black;
-  opacity: 0.6;
-}
+
 
 </style>

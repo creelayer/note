@@ -5,6 +5,7 @@ import com.ohmynone.rest.dto.TagDTO;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.entity.BookmarkSearchData;
+import com.ohmynone.rest.entity.Tag;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.repository.BookmarkRepository;
 import org.springframework.data.domain.Page;

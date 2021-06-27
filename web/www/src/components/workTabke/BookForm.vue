@@ -7,7 +7,7 @@
     </div>
     <div >
       <input v-model="name" type="text" class="form-control" placeholder="Enter book name">
-      <button type="submit" class="btn btn-primary btn-sm mt-1" v-on:click="submit"><i class="bi bi-check2"></i></button>
+      <button type="submit" class="btn btn-primary btn-sm mt-1" v-on:click="submit">Save</button>
     </div>
   </div>
 </template>

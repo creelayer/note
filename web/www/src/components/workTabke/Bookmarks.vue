@@ -8,29 +8,18 @@
   <BookmarkForm v-if="showCreateFrom" :after-save="afterSave" :book="book" :is-inline="true"/>
 
 
-  <div class="" :key="bookmark.id" v-for="(bookmark, index) in bookmarks">
-    <div v-if="editIndex!==index" v-on:click="view(bookmark)"
+  <div class="" :key="bookmark.id" v-for="(bookmark) in bookmarks">
+    <div v-on:click="view(bookmark)"
          class="border rounded-3 shadow-sm p-2 mb-2 context-menu bookmark">
       <a>{{ bookmark.name }}</a>
 
       <div class="info">
-        <ul class="tags">
-
-          <li
-              class="tag" style="color: #60717D">
-            {{ bookmark.book.name }}
-          </li>
-
-          <li :key="tag" v-for="tag in bookmark.tags" :style="'background-color:#'+tag.color"
-              class="tag ">
-            {{ tag.name }}
-          </li>
-        </ul>
+        <InlineTags :bookmark="bookmark"/>
         <i class="bi bi-eye float-end"></i>
       </div>
 
 
-      <div v-if="editIndex!==index" class="dropdown without-caret float-end">
+      <div class="dropdown without-caret float-end">
         <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
@@ -39,9 +28,6 @@
         </ul>
       </div>
 
-    </div>
-    <div v-if="editIndex===index">
-      <BookmarkForm :bookmark="bookmark" :after-save="afterSave"/>&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
 
   </div>
@@ -73,10 +59,11 @@
 
 <script>
 import BookmarkForm from "@/components/workTabke/BookmarkForm";
+import InlineTags from "@/components/tags/Inline.vue";
 
 export default {
   name: "Bookmarks",
-  components: {BookmarkForm},
+  components: {BookmarkForm, InlineTags},
   data() {
     return {
       showCreateFrom: false,

@@ -25,8 +25,8 @@ public class TagService {
         return tagRepository.findAllByUserIdOrderByIdDesc(user.getId());
     }
 
-    public Tag save(Tag book) {
-        return tagRepository.save(book);
+    public Tag save(Tag tag) {
+        return tagRepository.save(tag);
     }
 
     public Set<Tag> addTags(User user, Set<String> names) {

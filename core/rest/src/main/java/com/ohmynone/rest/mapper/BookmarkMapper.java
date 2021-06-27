@@ -18,6 +18,7 @@ public interface BookmarkMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "tags", ignore = true)
+    @Mapping(target = "book", ignore = true)
     Bookmark map(BookmarkDTO dto, @MappingTarget Bookmark origin);
 
     BookmarkDTO map(Bookmark bookmark);
