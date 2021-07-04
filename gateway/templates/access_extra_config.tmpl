@@ -1,0 +1,12 @@
+{
+  "github.com/devopsfaith/krakend-jose/validator": {
+    "disable_jwk_security": true,
+    "alg": "RS256",
+    "roles_key_is_nested": true,
+    "roles_key": "realm_access.roles",
+    "roles": [
+      "default-roles-note"
+    ],
+    "jwk-url": "http://note_auth:8080/auth/realms/note/protocol/openid-connect/certs"
+  }
+}

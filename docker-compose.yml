@@ -2,17 +2,19 @@ version: "3"
 
 services:
 
-  db:
-    build:
-      context: ./db
-    container_name: note_db
+  gateway:
+    image: devopsfaith/krakend:1.4.1
+    container_name: note_gateway
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: note
+      FC_ENABLE: 1
+      FC_SETTINGS: settings
+      # FC_PARTIALS: partials
+      FC_TEMPLATES: templates
+      FC_OUT: compiled.json
     volumes:
-      - ./db/data:/var/lib/postgresql/data
+      - ./gateway:/etc/krakend
     ports:
-      - 5434:5432
+      - 8080:8080
 
   web:
     build:
@@ -25,12 +27,45 @@ services:
       - ./web/www/public/index.html:/var/www/public/index.html
       - ./web/www/src:/var/www/src
     ports:
-      - "8082:8080"
+      - 8082:8080
+
+  db:
+    build:
+      context: ./db
+    container_name: note_core_db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: note
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    ports:
+      - 5434:5432    
+
+  auth:
+    image: quay.io/keycloak/keycloak:14.0.0
+    container_name: note_auth
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: note_auth_db
+      DB_DATABASE: auth
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: postgres
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      # KEYCLOAK_LOGLEVEL: TRACE
+      # ROOT_LOGLEVEL: TRACE
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 9000:8080
+    depends_on:
+      - db.auth
 
   db.auth:
     build:
       context: ./db.auth
-    container_name: auth_db
+    container_name: note_auth_db
     volumes:
       - ./db.auth/data:/var/lib/postgresql/data
     ports:
@@ -40,25 +75,15 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
-  # keycloak:
-  #   image: quay.io/keycloak/keycloak:14.0.0
-  #   environment:
-  #     DB_VENDOR: POSTGRES
-  #     DB_ADDR: user_db
-  #     DB_DATABASE: user
-  #     DB_USER: postgres
-  #     DB_SCHEMA: public
-  #     DB_PASSWORD: postgres
-  #     KEYCLOAK_USER: admin
-  #     KEYCLOAK_PASSWORD: admin
-  #       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-  #       #JDBC_PARAMS: "ssl=true"
-  #   ports:
-  #     - 9000:8080
-  #   depends_on:
-  #     - db.user
 
 
+# networks:
+#   kong-net:
+#     external: false
+
+
+
+# http://localhost:9000/auth/realms/note/protocol/openid-connect/auth?response_type=code&client_id=login&redirect_uri=http://localhost:9000/auth/realms/note/account
 #    networks:
 #      - backend    
 

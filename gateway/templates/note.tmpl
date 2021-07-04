@@ -1,0 +1,12 @@
+{
+  "endpoint": "/v1/bookmark/{id}",
+  "backend": [
+    {
+      "url_pattern": "/v1/bookmark/{id}",
+      "host": [
+          "http://host.docker.internal:8081"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+}

@@ -29,10 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+           //     .antMatchers("/v1/bookmark/*").permitAll()
                 .antMatchers("/v1/*").hasRole("USER")
                 .anyRequest().authenticated()
-                .and()
-                .httpBasic()
+//                .and()
+//                .httpBasic()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }

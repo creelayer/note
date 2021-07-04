@@ -18,7 +18,6 @@
         <i class="bi bi-eye float-end"></i>
       </div>
 
-
       <div class="dropdown without-caret float-end">
         <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-three-dots-vertical"></i>
@@ -59,7 +58,9 @@
 
 <script>
 import BookmarkForm from "@/components/workTabke/BookmarkForm";
-import InlineTags from "@/components/tags/Inline.vue";
+import InlineTags from "@/components/tags/Inline";
+import Client from "@/Api"
+
 
 export default {
   name: "Bookmarks",
@@ -81,7 +82,7 @@ export default {
       this.$parent.viewBookmark(bookmark);
     },
     fetchData: function () {
-      fetch('/v1/search/live?' + this._getSearchUrl())
+      Client.get('/v1/search/live?' + this._getSearchUrl())
           .then(res => res.json())
           .then(res => {
             this.bookmarks = res.data.content;
