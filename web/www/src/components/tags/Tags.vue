@@ -3,9 +3,6 @@
     <tbody>
     <tr :key="tag.id" v-for="tag in tags">
       <td>
-
-
-
         <div class="float-start me-2">
           {{ tag.name }}
         </div>
@@ -29,6 +26,7 @@
 
 <script>
 import Color from '@/components/ColorPicker.vue';
+import Rest from "@/api/Rest"
 
 export default {
   name: "Tags",
@@ -47,19 +45,11 @@ export default {
           });
     },
     choose: function (id, color) {
-
       let tag = this.tags.find(t => t.id === id);
       tag.color = color;
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(tag)
-      };
-      fetch('/v1/tag/' + tag.id, requestOptions)
-          .then(res => res.json())
-          .then(() => {
-
-          });
+      Rest.post('/v1/tag/' + tag.id, tag).then(() => {
+        this.fetchData();
+      });
     }
   }
 }

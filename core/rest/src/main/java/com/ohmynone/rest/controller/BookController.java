@@ -1,9 +1,9 @@
 package com.ohmynone.rest.controller;
 
-import com.ohmynone.rest.component.CurrentUserDetails;
 import com.ohmynone.rest.dto.BookDTO;
 import com.ohmynone.rest.dto.Response;
 import com.ohmynone.rest.entity.Book;
+import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.mapper.BookMapper;
 import com.ohmynone.rest.service.BookService;
 import org.springframework.data.domain.Page;
@@ -27,15 +27,15 @@ public class BookController {
 
     @GetMapping("")
     Response<Page<BookDTO>> index(Pageable pageable, Response<Page<BookDTO>> model) {
-        return model.setData(bookService.search(pageable).map(mapper::map));
+            return model.setData(bookService.search(pageable).map(mapper::map));
     }
 
     @PostMapping("")
     Response<BookDTO> createBook(@Valid @RequestBody BookDTO dto,
-                                 @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                 @AuthenticationPrincipal Identity identity,
                                  Response<BookDTO> model) {
         com.ohmynone.rest.entity.Book book = mapper.map(dto);
-        book.setUser(userDetails.getUser());
+        book.setIdentity(identity);
         bookService.save(book);
         return model.setData(mapper.map(book));
     }
@@ -43,7 +43,7 @@ public class BookController {
     @PostMapping("/{id}")
     Response<BookDTO> updateBook(@PathVariable Long id,
                                  @Valid @RequestBody BookDTO dto,
-                                 @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                 @AuthenticationPrincipal Identity identity,
                                  Response<BookDTO> model) {
         Book book = mapper.map(dto, bookService.findOne(id).orElseThrow());
         return model.setData(mapper.map(bookService.save(book)));
@@ -51,7 +51,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     Response<BookDTO> deleteBook(@PathVariable Long id,
-                                 @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                 @AuthenticationPrincipal Identity identity,
                                  Response<BookDTO> model) {
         Book book = bookService.findOne(id).orElseThrow();
         bookService.delete(book);

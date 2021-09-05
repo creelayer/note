@@ -7,7 +7,10 @@ import org.springframework.data.jpa.domain.Specification;
 public class BookmarkSpecification {
 
     public static Specification<Bookmark> available() {
-        return (root, query, builder) -> builder.isNull(root.get("deletedAt"));
+        return (root, query, builder) -> builder.and(
+                builder.isNull(root.join("book").get("deletedAt")),
+                builder.isNull(root.get("deletedAt"))
+        );
     }
 
     public static Specification<Bookmark> book(Long bookId) {
@@ -39,6 +42,4 @@ public class BookmarkSpecification {
             return specification.toPredicate(root, query, builder);
         };
     }
-
-
 }

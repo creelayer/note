@@ -31,6 +31,7 @@
 <script>
 
 
+import Rest from "@/api/Rest";
 
 export default {
   name: "BookForm",
@@ -38,7 +39,6 @@ export default {
   props: {
     book: null,
     bookmark: null,
-    afterSave: null,
     isInline: null
   },
   created() {
@@ -55,13 +55,13 @@ export default {
   },
   methods: {
     fetchTags: function () {
-      fetch('/v1/tag')
-          .then(res => res.json())
+      Rest.get('/v1/tag')
           .then(res => {
             this.allTags = res.data;
           });
     },
     submit: function (e) {
+      let _that = this;
       this.errors = [];
       if (!this.name) {
         this.errors.push('Требуется указать имя.');
@@ -78,18 +78,10 @@ export default {
         tags: this.tags
       };
 
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(bookmark)
-      };
-
-      fetch(this.bookmark ? '/v1/bookmark/' + this.bookmark.id : '/v1/bookmark', requestOptions)
-          .then(res => res.json())
-          .then(res => {
-            if (this.afterSave) this.afterSave(res.data);
+      Rest.post(this.bookmark ? '/v1/bookmark/' + this.bookmark.id : '/v1/bookmark', bookmark)
+          .then(() => {
+            _that.$parent.fetchData(this.book);
           });
-
       e.preventDefault();
     }
   }

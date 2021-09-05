@@ -3,6 +3,6 @@
  */
 module.exports = {
     devServer: {
-        proxy: 'http://host.docker.internal:8081'
+        proxy: 'http://host.docker.internal:9090'
     }
 }

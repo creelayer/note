@@ -1,7 +1,7 @@
 package com.ohmynone.rest.service;
 
 import com.ohmynone.rest.entity.Tag;
-import com.ohmynone.rest.entity.User;
+import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,17 @@ public class TagService {
         return tagRepository.findById(id);
     }
 
-    public Set<Tag> findAllByUser(User user) {
-        return tagRepository.findAllByUserIdOrderByIdDesc(user.getId());
+    public Set<Tag> findAllByIdentity(Identity identity) {
+        return tagRepository.findAllByIdentityUidOrderByIdDesc(identity.getUid());
     }
 
     public Tag save(Tag tag) {
         return tagRepository.save(tag);
     }
 
-    public Set<Tag> addTags(User user, Set<String> names) {
+    public Set<Tag> addTags(Identity user, Set<String> names) {
 
-        Set<Tag> tags = tagRepository.findAllByUserIdAndNameIn(user.getId(), names);
+        Set<Tag> tags = tagRepository.findAllByIdentityUidAndNameIn(user.getUid(), names);
 
         for (Tag tag : tags) {
             names.remove(tag.getName());

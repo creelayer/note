@@ -1,10 +1,10 @@
 package com.ohmynone.rest.controller;
 
-import com.ohmynone.rest.component.CurrentUserDetails;
 import com.ohmynone.rest.dto.BookmarkDTO;
 import com.ohmynone.rest.dto.Response;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
+import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.service.BookService;
 import com.ohmynone.rest.service.BookmarkService;
@@ -50,7 +50,7 @@ public class BookmarkController {
 
     @PostMapping("")
     Response<BookmarkDTO> createBookmark(@Valid @RequestBody BookmarkDTO dto,
-                                         @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                         @AuthenticationPrincipal Identity Identity,
                                          Response<BookmarkDTO> model) {
         Book book = bookService.findOne(dto.getBookId()).orElseThrow();
 
@@ -61,7 +61,7 @@ public class BookmarkController {
     @PostMapping("/{id}")
     Response<BookmarkDTO> updateBookmark(@PathVariable Long id,
                                          @Valid @RequestBody BookmarkDTO dto,
-                                         @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                         @AuthenticationPrincipal Identity Identity,
                                          Response<BookmarkDTO> model) {
         Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
         bookmark = bookmarkService.updateBookmark(bookmark, dto);
@@ -70,7 +70,7 @@ public class BookmarkController {
 
     @DeleteMapping("/{id}")
     Response<BookmarkDTO> deleteBookmark(@PathVariable Long id,
-                                         @AuthenticationPrincipal CurrentUserDetails userDetails,
+                                         @AuthenticationPrincipal Identity Identity,
                                          Response<BookmarkDTO> model) {
         Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
         bookmarkService.delete(bookmark);

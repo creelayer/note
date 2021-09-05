@@ -52,10 +52,6 @@ public class BookmarkService {
     }
 
     public void delete(Bookmark bookmark) {
-        BookmarkSearchData searchData = bookmark.getSearchData();
-        if (searchData != null)
-            bookmarkSearchDataService.delete(searchData);
-
         bookmark.setDeletedAt(LocalDateTime.now());
         save(bookmark);
     }
@@ -65,7 +61,7 @@ public class BookmarkService {
         bookmark.setBook(book);
         if (dto.getTags() != null) {
             Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
-            bookmark.setTags(tagService.addTags(book.getUser(), names));
+            bookmark.setTags(tagService.addTags(book.getIdentity(), names));
         }
         save(bookmark);
         bookmarkSearchDataService.index(bookmark);
@@ -75,7 +71,7 @@ public class BookmarkService {
     public Bookmark updateBookmark(Bookmark bookmark, BookmarkDTO dto) {
         bookmark = mapper.map(dto, bookmark);
         Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
-        bookmark.setTags(tagService.addTags(bookmark.getBook().getUser(), names));
+        bookmark.setTags(tagService.addTags(bookmark.getBook().getIdentity(), names));
         save(bookmark);
         bookmarkSearchDataService.index(bookmark);
         return bookmark;

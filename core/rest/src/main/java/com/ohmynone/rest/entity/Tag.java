@@ -13,8 +13,8 @@ public class Tag extends BaseEntity {
     public Tag(){
     }
 
-    public Tag(User user, String name){
-        this.user = user;
+    public Tag(Identity identity, String name){
+        this.identity = identity;
         this.name = name;
     }
 
@@ -23,7 +23,7 @@ public class Tag extends BaseEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Identity identity;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "tag")
     private Set<TagProperty> properties;

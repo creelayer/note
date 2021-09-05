@@ -5,7 +5,7 @@
         <li v-bind:key="error" v-for="error in errors">{{ error }}</li>
       </ul>
     </div>
-    <div >
+    <div>
       <input v-model="name" type="text" class="form-control" placeholder="Enter book name">
       <button type="submit" class="btn btn-primary btn-sm mt-1" v-on:click="submit">Save</button>
     </div>
@@ -17,11 +17,12 @@
 </style>
 
 <script>
+import Rest from "@/api/Rest"
+
 export default {
   name: "BookForm",
   props: {
     book: null,
-    afterSave: null,
   },
   data() {
     return {
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     submit: function (e) {
-
+      let _that = this;
       this.errors = [];
       if (!this.name) {
         this.errors.push('Требуется указать имя.');
@@ -44,18 +45,10 @@ export default {
       let book = this.book ? this.book : {id: null, name: ''};
       book.name = this.name;
 
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(book)
-      };
-
-      fetch(book.id ? '/v1/book/' + book.id : '/v1/book', requestOptions)
-          .then(res => res.json())
-          .then(res => {
-            if (this.afterSave) this.afterSave(res.data);
+      Rest.post(book.id ? '/v1/book/' + book.id : '/v1/book', book)
+          .then(() => {
+            _that.$parent.fetchData();
           });
-
       e.preventDefault();
     }
   }

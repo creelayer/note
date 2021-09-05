@@ -2,25 +2,25 @@
   <div class="d-grid gap-2">
     <button v-on:click="showCreateFrom = true" class="btn btn-light mb-2" type="button">+ Add</button>
   </div>
-  <BookForm v-if="showCreateFrom" :after-save="afterSave"/>
+  <BookForm v-if="showCreateFrom"/>
 
   <ul class="books">
     <li>
       <a v-on:click="view(null)">All books</a>
     </li>
     <li :key="book.id" v-for="(book, index) in books" v-on:click="view(book)" class="context-menu">
-      <a v-if="editIndex!==index">{{ book.name }}</a>
+      <a v-if="editFromIndex!==index">{{ book.name }}</a>
 
-      <div v-if="editIndex!==index" class="dropdown without-caret float-end">
+      <div v-if="editFromIndex!==index" class="dropdown without-caret float-end">
         <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="#" v-on:click="editIndex = index">Edit</a></li>
+          <li><a class="dropdown-item" href="#" v-on:click="editFromIndex = index">Edit</a></li>
           <li><a class="dropdown-item" href="#" v-on:click="remove(book)">Delete</a></li>
         </ul>
       </div>
-      <BookForm :book="book" v-if="editIndex===index" :after-save="afterSave"/>
+      <BookForm :book="book" v-if="editFromIndex===index"/>
     </li>
   </ul>
 
@@ -39,7 +39,7 @@
       Tag editor
     </template>
     <template v-slot:body>
-     <Tags ref="tags"/>
+      <Tags ref="tags"/>
     </template>
   </Modal>
 
@@ -70,6 +70,7 @@
 import BookForm from "@/components/workTabke/BookForm";
 import Tags from '@/components/tags/Tags.vue';
 import Modal from '@/components/Modal.vue';
+import Rest from "@/api/Rest"
 
 export default {
   name: "Books",
@@ -78,7 +79,7 @@ export default {
     return {
       book: null,
       showCreateFrom: false,
-      editIndex: null,
+      editFromIndex: null,
       books: [],
       isModalVisible: false,
     }
@@ -88,31 +89,19 @@ export default {
   },
   methods: {
     view: function (book) {
-      this.$parent.book = book;
+      this.$parent.fetchBookmarks(book);
     },
     remove: function (book) {
-      const requestOptions = {
-        method: "DELETE",
-        headers: {"Content-Type": "application/json"},
-      };
-      fetch('/v1/book/' + book.id, requestOptions)
-          .then(res => res.json())
-          .then(() => {
-            this.fetchData();
-          });
+      Rest.del('/v1/book/' + book.id).then(() => {
+        this.fetchData();
+      })
     },
     fetchData: function () {
-      fetch('/v1/book')
-          .then(res => res.json())
-          .then(res => {
-            this.books = res.data.content;
-          });
-    },
-    afterSave: function (book) {
-      this.books[this.editIndex] = book;
       this.showCreateFrom = false;
-      this.editIndex = null;
-      this.fetchData();
+      this.editFromIndex = null;
+      Rest.get('/v1/book').then(res => {
+        this.books = res.data.content;
+      });
     },
     showModal() {
       this.$refs.tags.fetchData();

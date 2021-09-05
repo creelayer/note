@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, PagingAndSortingRepository<Book, Long> {
-    Page<Book> findAllByOrderByIdAsc(Pageable pageable);
+    Page<Book> findAllByDeletedAtIsNullOrderByIdAsc(Pageable pageable);
 }

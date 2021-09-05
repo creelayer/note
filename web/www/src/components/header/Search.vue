@@ -12,6 +12,9 @@
 </template>
 
 <script>
+
+import Debounce from "debounce";
+
 export default {
   name: "Search",
   data() {
@@ -19,27 +22,22 @@ export default {
       book: null,
       search: '',
       minSearchLen: 1,
-      timer: null,
-      delay: 150,
     }
   },
   methods: {
-    live: function () {
+    live:Debounce(function () {
 
-      if (this.timer) {
-        clearTimeout(this.timer);
-        this.timer = null;
-      }
+      this.search = this._clean(this.search)
 
       if (!this.search.length || this.search.length < this.minSearchLen) {
-        this.$parent.search = null;
+        this.$parent.$parent.fetchBookmarks(this.book, null);
         return;
       }
 
-      this.timer = setTimeout(() => {
-        this.$parent.search = this._clean(this.search);
-      }, this.delay);
-    },
+      this.$parent.$parent.fetchBookmarks(this.book, this.search);
+
+
+    },150),
     _clean: function (s) {
       let re = /[^а-я\w\s]/gi;
       return s.replace(re, '');

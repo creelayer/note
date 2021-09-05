@@ -1,0 +1,41 @@
+server:
+  port: 9080
+#jwt:
+#  auth-url: ${KEYCLOAK_REALM_AUTH_URL:http://localhost:9000/auth/realms/note}
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      httpclient:
+          wiretap: true
+      httpserver:
+          wiretap: true
+      routes:
+        - id: auth
+          uri: http://localhost:9000
+          predicates:
+            - Method=POST
+            - Path=/auth/token
+          filters:
+            - RewritePath=/auth/token, /auth/realms/note/protocol/openid-connect/token
+
+        - id: book
+          uri: http://localhost:9090
+          predicates:
+            - Method=GET
+            - Path=/v1/**
+#          filters:
+#            - name: JwtFilter
+#              args:
+#                roles: USER, ADMIN

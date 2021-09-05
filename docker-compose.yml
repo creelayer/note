@@ -2,19 +2,19 @@ version: "3"
 
 services:
 
-  gateway:
-    image: devopsfaith/krakend:1.4.1
-    container_name: note_gateway
-    environment:
-      FC_ENABLE: 1
-      FC_SETTINGS: settings
-      # FC_PARTIALS: partials
-      FC_TEMPLATES: templates
-      FC_OUT: compiled.json
-    volumes:
-      - ./gateway:/etc/krakend
-    ports:
-      - 8080:8080
+  # gateway:
+  #   image: devopsfaith/krakend:1.4.1
+  #   container_name: note_gateway
+  #   environment:
+  #     FC_ENABLE: 1
+  #     FC_SETTINGS: settings
+  #     # FC_PARTIALS: partials
+  #     FC_TEMPLATES: templates
+  #     FC_OUT: compiled.json
+  #   volumes:
+  #     - ./gateway:/etc/krakend
+  #   ports:
+  #     - 8080:8080
 
   web:
     build:
@@ -41,39 +41,39 @@ services:
     ports:
       - 5434:5432    
 
-  auth:
-    image: quay.io/keycloak/keycloak:14.0.0
-    container_name: note_auth
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: note_auth_db
-      DB_DATABASE: auth
-      DB_USER: postgres
-      DB_SCHEMA: public
-      DB_PASSWORD: postgres
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      # KEYCLOAK_LOGLEVEL: TRACE
-      # ROOT_LOGLEVEL: TRACE
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "ssl=true"
-    ports:
-      - 9000:8080
-    depends_on:
-      - db.auth
+  # auth:
+  #   image: quay.io/keycloak/keycloak:14.0.0
+  #   container_name: note_auth
+  #   environment:
+  #     DB_VENDOR: POSTGRES
+  #     DB_ADDR: note_auth_db
+  #     DB_DATABASE: auth
+  #     DB_USER: postgres
+  #     DB_SCHEMA: public
+  #     DB_PASSWORD: postgres
+  #     KEYCLOAK_USER: admin
+  #     KEYCLOAK_PASSWORD: admin
+  #     # KEYCLOAK_LOGLEVEL: TRACE
+  #     # ROOT_LOGLEVEL: TRACE
+  #       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+  #       #JDBC_PARAMS: "ssl=true"
+  #   ports:
+  #     - 9000:8080
+  #   depends_on:
+  #     - db.auth
 
-  db.auth:
-    build:
-      context: ./db.auth
-    container_name: note_auth_db
-    volumes:
-      - ./db.auth/data:/var/lib/postgresql/data
-    ports:
-      - 5435:5432
-    environment:
-      POSTGRES_DB: auth
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+  # db.auth:
+  #   build:
+  #     context: ./db.auth
+  #   container_name: note_auth_db
+  #   volumes:
+  #     - ./db.auth/data:/var/lib/postgresql/data
+  #   ports:
+  #     - 5435:5432
+  #   environment:
+  #     POSTGRES_DB: auth
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
 
 
 

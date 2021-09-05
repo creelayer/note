@@ -19,14 +19,13 @@ public class Book extends BaseEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private User user;
+    private Identity identity;
 
     @Basic
     private String name;
 
     @JsonIgnore
     @Getter
-    @CreationTimestamp
     @Column(columnDefinition = "timestamp default null")
     protected LocalDateTime deletedAt;
 }

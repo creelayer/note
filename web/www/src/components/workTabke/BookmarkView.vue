@@ -100,7 +100,8 @@ h1 i:hover {
 import InlineTags from "@/components/tags/Inline.vue";
 import Editor from '@tinymce/tinymce-vue'
 import TextareaAutoSize from "@/components/TextareaAutoSize.vue";
-import debounce from "debounce";
+import Rest from "@/api/Rest"
+import Debounce from "debounce";
 
 export default {
   name: "BookmarkView",
@@ -122,8 +123,7 @@ export default {
     fetchData: function (bookmark) {
       this.editTile = false;
       this.editBody = false;
-      fetch('/v1/bookmark/' + bookmark.id)
-          .then(res => res.json())
+      Rest.get('/v1/bookmark/' + bookmark.id)
           .then(res => {
             this.bookmark = res.data;
             this.name = this.bookmark.name;
@@ -133,23 +133,18 @@ export default {
             }
           });
     },
-    saveData: debounce(function () {
+    saveData: Debounce(function () {
       let bookmark = {
         bookId: this.bookmark.bookId,
         name: this.name,
         body: this.body,
         tags: this.tags
       };
-      const requestOptions = {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(bookmark)
-      };
-      fetch('/v1/bookmark/' + this.bookmark.id, requestOptions)
-          .then(res => res.json())
+      Rest.post('/v1/bookmark/' + this.bookmark.id, bookmark)
           .then(res => {
             console.log(res);
           });
+
     }, 100),
     actionEditTitle: function () {
       this.editTile = true;

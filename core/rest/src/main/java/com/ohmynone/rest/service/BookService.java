@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -22,7 +23,7 @@ public class BookService {
     }
 
     public Page<Book> search(Pageable pageable) {
-        return bookRepository.findAllByOrderByIdAsc(pageable);
+        return bookRepository.findAllByDeletedAtIsNullOrderByIdAsc(pageable);
     }
 
     public Book save(Book book) {
@@ -30,7 +31,8 @@ public class BookService {
     }
 
     public void delete(Book book) {
-        bookRepository.delete(book);
+        book.setDeletedAt(LocalDateTime.now());
+        save(book);
     }
 
 }

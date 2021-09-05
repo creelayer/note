@@ -26,23 +26,13 @@ export default {
   components: {Nav, Books, Bookmarks, BookmarkView},
   data() {
     return {
-      book: null,
-      search: null,
-    }
-  },
-  watch: {
-    book: function (book) {
-      this.$refs.bookmarks.book = book;
-      this.fetchBookmarks();
-    },
-    search: function (val) {
-      this.$refs.bookmarks.search = val;
-      this.fetchBookmarks();
+      // book: null,
+      // search: null,
     }
   },
   methods: {
-    fetchBookmarks: function () {
-      this.$refs.bookmarks.fetchData();
+    fetchBookmarks: function (book, search) {
+      this.$refs.bookmarks.fetchData(book, search);
     },
     viewBookmark: function (bookmark) {
       this.$refs.view.fetchData(bookmark);

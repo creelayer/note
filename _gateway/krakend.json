@@ -2,6 +2,6 @@
   "version": 2,
   "endpoints": [
     {{ template "auth.tmpl" }},
-    {{ template "note.tmpl" }}
+    {{ template "book.tmpl" }}
   ]
 }

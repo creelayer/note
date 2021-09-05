@@ -1,0 +1,70 @@
+{
+  "endpoint": "/v1/book",
+  "method":"GET",
+  "headers_to_pass": [ "x-user" ],
+  "backend": [
+    {
+      "url_pattern": "/v1/book",
+      "host": [
+          "http://host.docker.internal:9090"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+},
+{
+  "endpoint": "/v1/search/live",
+  "headers_to_pass": [ "x-user" ],
+  "backend": [
+    {
+      "url_pattern": "/v1/search/live",
+      "host": [
+          "http://host.docker.internal:9090"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+},
+{
+  "endpoint": "/v1/book",
+  "method":"POST",
+  "headers_to_pass": [ "x-user", "Content-Type", "Content-Length", "Host" ],
+  "backend": [
+    {
+      "url_pattern": "/v1/book",
+      "host": [
+          "http://host.docker.internal:9090"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+},
+{
+  "endpoint": "/v1/book/{id}",
+  "method":"POST",
+  "headers_to_pass": [ "x-user", "Content-Type", "Content-Length", "Host" ],
+  "backend": [
+    {
+      "url_pattern": "/v1/book/{id}",
+      "host": [
+          "http://host.docker.internal:9090"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+},
+{
+  "endpoint": "/v1/book/{id}",
+  "method":"DELETE",
+  "headers_to_pass": [ "x-user" ],
+  "backend": [
+    {
+      "url_pattern": "/v1/book/{id}",
+      "host": [
+          "http://host.docker.internal:9090"
+        ]
+    }
+  ],
+  "extra_config": {{ template "access_extra_config.tmpl"}}
+}
+
