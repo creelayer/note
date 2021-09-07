@@ -123,7 +123,7 @@ export default {
 }
 
 .tags {
-  margin: 10px 1px;
+  margin: 10px 1px 0px;
   padding: 0;
   position: relative;
   display: block;

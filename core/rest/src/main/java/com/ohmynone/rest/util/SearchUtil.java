@@ -12,6 +12,6 @@ public class SearchUtil {
                 .trim()
                 .replaceAll(" +", " ")
                 .toLowerCase()
-                .replaceAll("\\b\\w{1,2}\\b\\s?", "");
+                .replaceAll("\\b\\w\\b\\s?", "");
     }
 }

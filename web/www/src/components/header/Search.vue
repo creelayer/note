@@ -2,7 +2,7 @@
 
   <div class="container">
     <form v-on:submit.prevent="live">
-      <input class="form-control" id="search" type="search" placeholder="Search..." autocomplete="off"
+      <input class="form-control form-control-sm" id="search" type="search" placeholder="Search..." autocomplete="off"
              v-on:keyup="live"
              v-on:change="live"
              v-model="search">
@@ -21,7 +21,7 @@ export default {
     return {
       book: null,
       search: '',
-      minSearchLen: 1,
+      minSearchLen: 2,
     }
   },
   methods: {
@@ -39,7 +39,7 @@ export default {
 
     },150),
     _clean: function (s) {
-      let re = /[^а-я\w\s]/gi;
+      let re = /[^а-яєії\w\s]/gi;
       return s.replace(re, '');
     }
   }

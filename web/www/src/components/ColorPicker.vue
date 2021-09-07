@@ -47,12 +47,12 @@ export default {
     currentColor: null
   },
   created() {
-    this.current = this.currentColor
+    this.current = this.currentColor ? this.currentColor : 'E5E4E4'
   },
   data() {
     return {
       show: false,
-      colors: ['2ECC71', 'FFC300', 'FF5733', 'DE3163', 'DFFF00', '40E0D0', 'CCCCFF', '6495ED'],
+      colors: ['E5E4E4', '2ECC71', 'FFC300', 'FF5733', 'DE3163', 'DFFF00', '40E0D0', 'CCCCFF', '6495ED'],
       current: null
     }
   },

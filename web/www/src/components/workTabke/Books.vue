@@ -5,11 +5,11 @@
   <BookForm v-if="showCreateFrom"/>
 
   <ul class="books">
-    <li>
-      <a v-on:click="view(null)">All books</a>
+    <li v-on:click="view(null)" v-bind:class="(!book ? ' border rounded-2 current':'')">
+      <a >All books</a>
     </li>
-    <li :key="book.id" v-for="(book, index) in books" v-on:click="view(book)" class="context-menu">
-      <a v-if="editFromIndex!==index">{{ book.name }}</a>
+    <li :key="book1.id" v-for="(book1, index) in books" v-on:click="view(book1)" v-bind:class="'context-menu '+(book && book1.id === book.id ? ' border rounded-2 current':'')">
+      <a v-if="editFromIndex!==index">{{ book1.name }}</a>
 
       <div v-if="editFromIndex!==index" class="dropdown without-caret float-end">
         <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -17,10 +17,10 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li><a class="dropdown-item" href="#" v-on:click="editFromIndex = index">Edit</a></li>
-          <li><a class="dropdown-item" href="#" v-on:click="remove(book)">Delete</a></li>
+          <li><a class="dropdown-item" href="#" v-on:click="remove(book1)">Delete</a></li>
         </ul>
       </div>
-      <BookForm :book="book" v-if="editFromIndex===index"/>
+      <BookForm :book="book1" v-if="editFromIndex===index"/>
     </li>
   </ul>
 
@@ -53,8 +53,7 @@
 }
 
 .books > li {
-  font-size: 1em;
-  padding: 8px 10px;
+  padding: 5px 10px;
   cursor: pointer;
   color: #60717D;
 }
@@ -89,6 +88,7 @@ export default {
   },
   methods: {
     view: function (book) {
+      this.book = book;
       this.$parent.fetchBookmarks(book);
     },
     remove: function (book) {

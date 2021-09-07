@@ -21,6 +21,7 @@ public class BookmarkSearchData implements Serializable {
 
     @JsonIgnore
     @Basic(optional = false)
+    @Column(columnDefinition="TEXT")
     private String normalizedText;
 
 }

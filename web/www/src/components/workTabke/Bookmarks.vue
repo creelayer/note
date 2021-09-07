@@ -2,15 +2,19 @@
 
 
   <div class="d-grid gap-2">
-    <button v-on:click="showCreateFrom = true" :disabled="!book" class="btn btn-light mb-2" type="button" >+ Add</button>
+    <button v-on:click="showCreateFrom = true" :disabled="!book" class="btn btn-light mb-2" type="button">+ Add</button>
   </div>
 
   <BookmarkForm v-if="showCreateFrom" :book="book" :is-inline="true"/>
 
 
+  <div v-if="bookmarks.length === 0 " class="text-center text-muted mt-4">
+    {{search ? 'No items found...': 'There is no items yet. You may create your first...'}}
+  </div>
+
   <div class="context-menu" :key="bookmark.id" v-for="(bookmark) in bookmarks">
     <div v-on:click="view(bookmark)"
-         class="border rounded-3 shadow-sm p-2 mb-2  bookmark">
+         class="border rounded-3  p-2 mb-1  bookmark">
       <a>{{ bookmark.name }}</a>
 
       <div class="info">
@@ -39,8 +43,7 @@
   display: block;
   cursor: pointer;
   min-height: 70px;
-  font-size: 0.85em;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 0.95em;
 }
 
 .bi-eye {
@@ -85,16 +88,12 @@ export default {
     fetchData: function (book, search) {
       this.showCreateFrom = false;
       this.book = book;
+      this.search = search;
       Rest.get('/v1/search/live?' + this._getSearchUrl(book, search))
           .then(res => {
             this.bookmarks = res.data.content;
           });
     },
-    // afterSave: function (bookmark) {
-    //   this.bookmarks[this.editIndex] = bookmark;
-    //   this.showCreateFrom = false;
-    //   this.editIndex = null;
-    // },
     _getSearchUrl: function (book, search) {
       let query = '';
       if (book)

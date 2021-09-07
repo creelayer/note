@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     fetchBookmarks: function (book, search) {
+      this.$refs.nav.$refs.search.book = book;
       this.$refs.bookmarks.fetchData(book, search);
     },
     viewBookmark: function (bookmark) {
@@ -42,6 +43,12 @@ export default {
 </script>
 
 <style>
+
+body{
+  font-size: 14px;
+  font-family: Sans-serif,sans-serif;
+}
+
 .workspace {
   padding-top: 56px;
   height: 100%;

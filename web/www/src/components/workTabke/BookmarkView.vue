@@ -5,7 +5,7 @@
 
     <div v-if="bookmark">
 
-      <h1 v-if="!editTile">{{ name }} <i class="bi bi-pencil" v-on:click="actionEditTitle"></i></h1>
+      <h3 v-if="!editTile">{{ name }} <i class="bi bi-pencil" v-on:click="actionEditTitle"></i></h3>
 
       <TextareaAutoSize v-if="editTile" v-model="name" v-on:blur="eventTitleChanged" ref="titleEditAutoSize"/>
 
@@ -48,14 +48,15 @@
 }
 
 .body {
-  margin-top: 6px;
+  margin-top: 12px;
 }
 
 .mce-content-body {
   min-height: 100px;
+  padding: 4px;
 }
 
-h1 i {
+h3 i {
   cursor: pointer;
   font-size: 16px;
   margin-top: -10px;
@@ -125,9 +126,11 @@ export default {
       this.editBody = false;
       Rest.get('/v1/bookmark/' + bookmark.id)
           .then(res => {
+            console.log(res);
             this.bookmark = res.data;
             this.name = this.bookmark.name;
             this.body = this.bookmark.body;
+            this.tags = this.bookmark.tags;
             if (!this.body) {
               this.editBody = true;
             }

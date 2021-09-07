@@ -32,6 +32,8 @@ public class BookmarkSearchDataService {
             sb.append(" ").append(tag.getName());
         }
 
+        sb.append(" ").append(bookmark.getBook().getName());
+
         searchData.setBookmark(bookmark);
         searchData.setNormalizedText(SearchUtil.normalize(sb.toString()));
 

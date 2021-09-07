@@ -1,5 +1,5 @@
 <template>
-  <textarea class="textarea autosize h1" ref="autosize" :value='modelValue' @input='$emit("update:modelValue", $event.target.value)'/>
+  <textarea class="textarea autosize h3" ref="autosize" :value='modelValue' @input='$emit("update:modelValue", $event.target.value)'/>
 </template>
 
 <style scoped>
