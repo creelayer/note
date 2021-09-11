@@ -7,7 +7,6 @@ import com.ohmynone.rest.entity.Tag;
 import com.ohmynone.rest.mapper.TagMapper;
 import com.ohmynone.rest.service.TagService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,7 +32,7 @@ public class TagController {
     @PostMapping("/{id}")
     Response<TagDTO> updateBook(@PathVariable Long id,
                                  @Valid @RequestBody TagDTO dto,
-                                 @AuthenticationPrincipal UserDetails userDetails,
+                                 @AuthenticationPrincipal Identity identity,
                                  Response<TagDTO> model) {
         Tag tag = mapper.map(dto, tagService.findOne(id).orElseThrow());
         return model.setData(mapper.map(tagService.save(tag)));

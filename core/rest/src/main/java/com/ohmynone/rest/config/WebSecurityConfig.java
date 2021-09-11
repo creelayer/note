@@ -1,56 +1,95 @@
 package com.ohmynone.rest.config;
 
-import com.ohmynone.rest.component.UserUUIDFilter;
-import com.ohmynone.rest.service.IdentityService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ohmynone.rest.component.TokenFilter;
+import com.ohmynone.rest.dto.Response;
+import com.ohmynone.rest.pkg.user.component.CustomUserDetails;
+import com.ohmynone.rest.pkg.user.entity.Token;
+import com.ohmynone.rest.pkg.user.entity.User;
+import com.ohmynone.rest.pkg.user.repository.UserRepository;
+import com.ohmynone.rest.pkg.user.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    IdentityService identityService;
+    UserRepository userRepository;
 
-    private final UserUUIDFilter userUUIDFilter;
+    private final TokenFilter tokenFilter;
+    private final ObjectMapper objectMapper;
+    private final TokenService tokenService;
+
+    public WebSecurityConfig(TokenService tokenService,
+                             UserRepository userRepository,
+                             TokenFilter tokenFilter,
+                             ObjectMapper objectMapper
+    ) {
+        this.tokenService = tokenService;
+        this.userRepository = userRepository;
+        this.tokenFilter = tokenFilter;
+        this.objectMapper = objectMapper;
+    }
 
     @Bean
     public PasswordEncoder encoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    public WebSecurityConfig(UserUUIDFilter userUUIDFilter, IdentityService identityService) {
-        this.userUUIDFilter = userUUIDFilter;
-        this.identityService = identityService;
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
+                .httpBasic().disable()
                 .authorizeRequests()
+                .antMatchers("/auth/refresh").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .formLogin()
+                .loginProcessingUrl("/auth/token")
+                .successHandler(this::loginSuccessHandler)
+                .failureHandler(this::loginFailureHandler)
                 .and()
-                .addFilterBefore(userUUIDFilter, UsernamePasswordAuthenticationFilter.class);
+                .logout().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    private void loginFailureHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json");
+        objectMapper.writeValue(response.getWriter(), new Response<>("Invalid username or password"));
+    }
+
+    private void loginSuccessHandler(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType("application/json");
+        Token token = tokenService.generateByUser((User) authentication.getPrincipal());
+        objectMapper.writeValue(response.getWriter(), new Response<>(token));
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return identityService;
+        return new CustomUserDetails(userRepository);
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService());
-    }
 }

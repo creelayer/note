@@ -1,13 +1,17 @@
 package com.ohmynone.rest.entity;
 
+import com.ohmynone.rest.pkg.user.entity.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.UUID;
+
 
 @Setter
 @Getter
@@ -57,6 +61,4 @@ public class Identity extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

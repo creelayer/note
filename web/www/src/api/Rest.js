@@ -1,5 +1,5 @@
 // import Auth from "@/api/Auth"
-// import Router from "@/router/index"
+import Router from "@/router/index"
 
 const METHOD_GET = 'GET';
 const METHOD_POST = 'POST';
@@ -39,10 +39,10 @@ function del(url) {
 
 function request(method, url, body) {
 
-    // if (this.getAccessToken() == null) {
-    //     Router.replace("/login");
-    //     return Promise.reject("Token expired");
-    // }
+    if (this.getAccessToken() == null) {
+        Router.replace("/login");
+        return Promise.reject("Token expired");
+    }
 
     // let that = this;
     const requestOptions = {

@@ -2,34 +2,24 @@ package com.ohmynone.rest.service;
 
 import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.repository.IdentityRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-
 @Service
-public class IdentityService implements UserDetailsService {
+public class IdentityService  {
 
-    protected IdentityRepository userRepository;
+    protected IdentityRepository identityRepository;
 
-    public IdentityService(IdentityRepository userRepository) {
-        this.userRepository = userRepository;
+    public IdentityService(IdentityRepository identityRepository) {
+        this.identityRepository = identityRepository;
     }
 
-
-    @Override
-    public UserDetails loadUserByUsername(String uid) throws UsernameNotFoundException {
-        return userRepository
-                .findByUid(UUID.fromString(uid))
-                .orElseThrow(() -> new UsernameNotFoundException(uid));
-    }
-
-    public UserDetails findOrCreate(Identity identity) {
-        return userRepository
-                .findByUid(identity.getUid())
-                .orElseGet(() -> userRepository.save(identity));
+    public Identity findOrCreate(UUID uuid) {
+        return identityRepository
+                .findByUid(uuid)
+                .orElseGet(() -> {
+                    return identityRepository.save(new Identity(uuid));
+                });
     }
 }

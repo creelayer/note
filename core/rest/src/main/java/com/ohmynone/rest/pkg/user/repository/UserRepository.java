@@ -1,6 +1,5 @@
-package com.ohmynone.rest.repository;
+package com.ohmynone.rest.pkg.user.repository;
 
-import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.pkg.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -9,6 +8,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface IdentityRepository extends JpaRepository<Identity, Long> {
-    Optional<Identity> findByUid(UUID uuid);
+public interface UserRepository extends JpaRepository<User, UUID> {
+    Optional<User> findOneByUsername(String username);
 }

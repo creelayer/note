@@ -31,10 +31,11 @@ public class Bookmark extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToOne(mappedBy = "bookmark", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "bookmark", fetch = FetchType.EAGER)
     private BookmarkSearchData searchData;
 
     @JsonIgnore

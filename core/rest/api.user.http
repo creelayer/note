@@ -1,0 +1,23 @@
+POST http://localhost:9090/token
+Authorization: Basic q q
+
+###
+
+POST http://localhost:9090/refresh
+Content-Type: application/json
+
+{
+  "refresh": "JOVcvZJ30u6MlG8DjGUarBMxr8MpuaZcL3VxeatWCcOxKZSG0FqdQwF65"
+}
+
+###
+
+GET http://localhost:9090/v1/book
+Authorization: Bearer Q4QX5cQqSAGG6ajuNebaPkdjlXXPcQAfC6SA2DnaxlejKuqxsw104w772
+
+###
+
+POST http://localhost:9090/token
+Content-Type: application/x-www-form-urlencoded
+
+username=q&password=q
