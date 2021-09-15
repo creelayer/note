@@ -1,6 +1,8 @@
 package com.ohmynone.rest.service;
 
+import com.ohmynone.rest.dto.BookSearchDto;
 import com.ohmynone.rest.entity.Book;
+import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.repository.BookRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,17 +24,20 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
-    public Page<Book> search(Pageable pageable) {
-        return bookRepository.findAllByDeletedAtIsNullOrderByIdAsc(pageable);
+    public Page<Book> search(BookSearchDto filter, Pageable pageable) {
+        if (filter.getIdentity() == null) {
+            return bookRepository.findAllByDeletedAtIsNullOrderByIdAsc(pageable);
+        }
+        return bookRepository.findAllByIdentityAndDeletedAtIsNullOrderByIdAsc(filter.getIdentity(), pageable);
     }
 
     public Book save(Book book) {
         return bookRepository.save(book);
     }
 
-    public void delete(Book book) {
+    public Book delete(Book book) {
         book.setDeletedAt(LocalDateTime.now());
-        save(book);
+        return save(book);
     }
 
 }

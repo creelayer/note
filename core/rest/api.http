@@ -57,7 +57,16 @@ Accept: application/json
 
 ###
 
-GET http://localhost:8081/v1/search/live?bookId=11
-Authorization: Basic dTE6MTIz
+GET http://localhost:9090/v1/search/live?bookId=8
+Authorization: Bearer 8PisxkkZcIHiZQR5tCmnn5uBBvppYwNFzw4vBZT0VwxfYILVenLEailaC
 Content-Type: application/json
-Accept: application/json
+
+###
+
+GET http://localhost:9090/v1/tag
+Authorization: Bearer 8PisxkkZcIHiZQR5tCmnn5uBBvppYwNFzw4vBZT0VwxfYILVenLEailaC
+
+###
+
+GET http://localhost:9090/v1/book/15
+Authorization: Bearer 8PisxkkZcIHiZQR5tCmnn5uBBvppYwNFzw4vBZT0VwxfYILVenLEailaC

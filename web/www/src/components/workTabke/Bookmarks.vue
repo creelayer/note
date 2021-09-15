@@ -9,7 +9,7 @@
 
 
   <div v-if="bookmarks.length === 0 " class="text-center text-muted mt-4">
-    {{search ? 'No items found...': 'There is no items yet. You may create your first...'}}
+    {{ search ? 'No items found...' : 'There is no items yet. You may create your first...' }}
   </div>
 
   <div class="context-menu" :key="bookmark.id" v-for="(bookmark) in bookmarks">
@@ -19,11 +19,11 @@
 
       <div class="info">
         <InlineTags :bookmark="bookmark"/>
-        <i class="bi bi-eye float-end"></i>
       </div>
 
     </div>
-
+    <i v-if="bookmark.pined === false" class="bi bi-pin-angle pin float-end" v-on:click="pin(bookmark)"></i>
+    <i v-if="bookmark.pined === true" class="bi bi-pin-fill pin float-end" v-on:click="pin(bookmark)"></i>
     <div class="dropdown without-caret float-end">
       <button class="btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-three-dots-vertical"></i>
@@ -46,11 +46,37 @@
   font-size: 0.95em;
 }
 
-.bi-eye {
+.bi-pin-angle {
   position: absolute;
   right: 10px;
   bottom: 5px;
   opacity: 0.5;
+  cursor: pointer;
+}
+
+.bi-pin-angle:hover {
+  color: blue;
+}
+
+.bi-pin-angle:hover::before {
+  content: "\f4ea";
+}
+
+.bi-pin-fill {
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+  opacity: 0.5;
+  cursor: pointer;
+  color: blue;
+}
+
+.bi-pin-fill:hover {
+  color: blue;
+}
+
+.bi-pin-fill:hover::before {
+  content: "\f4ed";
 }
 
 </style>
@@ -85,6 +111,12 @@ export default {
         this.fetchData();
       })
     },
+    pin: function (bookmark) {
+      Rest.post('/v1/bookmark/' + bookmark.id + '/pin')
+          .then(() => {
+            this.fetchData(this.book, this.search);
+          });
+    },
     fetchData: function (book, search) {
       this.showCreateFrom = false;
       this.book = book;
@@ -99,7 +131,7 @@ export default {
       if (book)
         query += '&bookId=' + book.id;
       if (search)
-        query += '&s=' + search;
+        query += '&search=' + search;
       return query;
     }
   }

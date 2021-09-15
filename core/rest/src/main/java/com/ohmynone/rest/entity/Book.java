@@ -1,12 +1,15 @@
 package com.ohmynone.rest.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ohmynone.rest.view.BookView;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -22,7 +25,7 @@ public class Book extends BaseEntity {
     private Identity identity;
 
     @Basic
-    private String name;
+    public String name;
 
     @JsonIgnore
     @Getter

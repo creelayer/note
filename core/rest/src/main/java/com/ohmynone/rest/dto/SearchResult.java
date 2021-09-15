@@ -12,12 +12,14 @@ public class SearchResult {
 
     private Long id;
 
-    private BookDTO book;
+    private BookDto book;
 
     @NotBlank(message = "Name is required")
     @Length(max = 255)
     private String name;
 
-    private Set<TagDTO> tags;
+    private boolean pined;
+
+    private Set<TagDto> tags;
 
 }

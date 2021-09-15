@@ -1,6 +1,6 @@
 package com.ohmynone.rest.service;
 
-import com.ohmynone.rest.dto.BookmarkSearch;
+import com.ohmynone.rest.dto.BookmarkSearchDto;
 import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.repository.BookmarkRepository;
 import com.ohmynone.rest.repository.TagRepository;
@@ -20,8 +20,7 @@ public class SearchService {
         this.tagRepository = tagRepository;
     }
 
-    public Page<Bookmark> search(BookmarkSearch filter, Pageable pageable) {
+    public Page<Bookmark> search(BookmarkSearchDto filter, Pageable pageable) {
         return bookmarkRepository.findAll(BookmarkSpecification.filter(filter), pageable);
     }
-
 }

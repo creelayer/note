@@ -78,7 +78,7 @@ export default {
         tags: this.tags
       };
 
-      Rest.post(this.bookmark ? '/v1/bookmark/' + this.bookmark.id : '/v1/bookmark', bookmark)
+      Rest.post(this.bookmark ? '/v1/bookmark/' + this.bookmark.id : '/v1/bookmark/add/' + this.book.id, bookmark)
           .then(() => {
             _that.$parent.fetchData(this.book);
           });

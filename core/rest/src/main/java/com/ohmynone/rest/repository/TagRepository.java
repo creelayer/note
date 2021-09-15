@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
-    LinkedHashSet<Tag> findAllByIdentityUidOrderByIdDesc(UUID uid);
+    List<Tag> findAllByIdentityUidOrderByIdDesc(UUID uid);
     Set<Tag> findAllByIdentityUidAndNameIn(UUID uid, Set<String> names);
 }

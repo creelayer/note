@@ -1,14 +1,11 @@
 package com.ohmynone.rest.repository.specification;
 
-import com.ohmynone.rest.dto.BookmarkSearch;
+import com.ohmynone.rest.dto.BookmarkSearchDto;
 import com.ohmynone.rest.entity.Bookmark;
-import com.ohmynone.rest.entity.BookmarkSearchData;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
+import java.util.UUID;
 
 public class BookmarkSpecification {
 
@@ -19,8 +16,12 @@ public class BookmarkSpecification {
         );
     }
 
-    public static Specification<Bookmark> book(Long bookId) {
-        return (root, query, builder) -> builder.equal(root.get("bookId"), bookId);
+    public static Specification<Bookmark> book(Long id) {
+        return (root, query, builder) -> builder.equal(root.get("book").get("id"), id);
+    }
+
+    public static Specification<Bookmark> identity(UUID uid) {
+        return (root, query, builder) -> builder.equal(root.get("book").get("identity").get("uid"), uid);
     }
 
     public static Specification<Bookmark> search(String normalizedText) {
@@ -30,7 +31,9 @@ public class BookmarkSpecification {
                     "tgrm_order",
                     Float.class,
                     root.get("searchData").get("normalizedText"),
-                    builder.literal(normalizedText))));
+                    builder.literal(normalizedText))),
+                    builder.desc(root.get("id"))
+            );
 
             return builder.isTrue(builder.function(
                     "tgrm_search",
@@ -40,7 +43,7 @@ public class BookmarkSpecification {
         };
     }
 
-    public static Specification<Bookmark> filter(BookmarkSearch filter) {
+    public static Specification<Bookmark> filter(BookmarkSearchDto filter) {
         return (root, query, builder) -> {
 
             root.fetch("book", JoinType.LEFT);
@@ -52,8 +55,14 @@ public class BookmarkSpecification {
                 specification = specification.and(book(filter.getBookId()));
             }
 
-            if (filter.getS() != null) {
+            if (filter.getSearch() != null) {
                 specification = specification.and(search(filter.getNormalizedText()));
+            } else {
+                query.orderBy(builder.desc(root.get("id")));
+            }
+
+            if (filter.getIdentity() != null) {
+                specification = specification.and(identity(filter.getIdentity().getUid()));
             }
 
             return specification.toPredicate(root, query, builder);

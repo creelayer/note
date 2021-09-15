@@ -3,13 +3,10 @@ package com.ohmynone.rest.component;
 import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.pkg.user.entity.Token;
 import com.ohmynone.rest.pkg.user.repository.TokenRepository;
-import com.ohmynone.rest.pkg.user.util.TokenUtil;
-import com.ohmynone.rest.repository.IdentityRepository;
 import com.ohmynone.rest.service.IdentityService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,14 +18,14 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class TokenFilter extends OncePerRequestFilter {
+public class TokenAccessFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
 
     private final TokenRepository tokenRepository;
     private final IdentityService identityService;
 
-    public TokenFilter(TokenRepository tokenRepository, IdentityService identityService) {
+    public TokenAccessFilter(TokenRepository tokenRepository, IdentityService identityService) {
         this.tokenRepository = tokenRepository;
         this.identityService = identityService;
     }

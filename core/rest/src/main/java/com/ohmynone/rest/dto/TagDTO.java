@@ -10,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @Getter
 @NoArgsConstructor
-public class TagDTO {
+public class TagDto {
 
-    public TagDTO(String name){
+    public TagDto(String name){
         this.name = name;
     }
 

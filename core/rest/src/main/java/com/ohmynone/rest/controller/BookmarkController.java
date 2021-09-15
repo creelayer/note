@@ -1,16 +1,12 @@
 package com.ohmynone.rest.controller;
 
-import com.ohmynone.rest.dto.BookmarkDTO;
+import com.ohmynone.rest.dto.BookmarkDto;
 import com.ohmynone.rest.dto.Response;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
-import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.mapper.BookmarkMapper;
-import com.ohmynone.rest.service.BookService;
 import com.ohmynone.rest.service.BookmarkService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,60 +17,50 @@ import javax.validation.Valid;
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
-    private final BookService bookService;
     private final BookmarkMapper mapper;
 
-    public BookmarkController(BookmarkService bookmarkService, BookService bookService, BookmarkMapper mapper) {
+    public BookmarkController(BookmarkService bookmarkService, BookmarkMapper mapper) {
         this.bookmarkService = bookmarkService;
-        this.bookService = bookService;
         this.mapper = mapper;
     }
 
-    @GetMapping("list")
-    Response<Page<BookmarkDTO>> index(Pageable pageable, Response<Page<BookmarkDTO>> model) {
-        return model.setData(bookmarkService.list(pageable).map(mapper::map));
-    }
-
-    @GetMapping("list/{id}")
-    Response<Page<BookmarkDTO>> index(@PathVariable Long id, Pageable pageable, Response<Page<BookmarkDTO>> model) {
-        Book book = bookService.findOne(id).orElseThrow();
-        return model.setData(bookmarkService.list(book, pageable).map(mapper::map));
-    }
-
     @GetMapping("{id}")
-    Response<BookmarkDTO> index(@PathVariable Long id, Response<BookmarkDTO> model) {
-        Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
-        var a = mapper.map(bookmark);
-        return model.setData(mapper.map(bookmark));
+    @PreAuthorize("#bookmark.book.identity.username == principal.username")
+    Response<Bookmark> view(@PathVariable("id") Bookmark bookmark, Response<Bookmark> model) {
+        return model.setData(bookmark);
     }
 
-    @PostMapping("")
-    Response<BookmarkDTO> createBookmark(@Valid @RequestBody BookmarkDTO dto,
-                                         @AuthenticationPrincipal Identity Identity,
-                                         Response<BookmarkDTO> model) {
-        Book book = bookService.findOne(dto.getBookId()).orElseThrow();
-
+    @PostMapping("add/{id}")
+    @PreAuthorize("#book.identity.username == principal.username")
+    Response<Bookmark> createBookmark(@PathVariable("id") Book book,
+                                         @Valid @RequestBody BookmarkDto dto,
+                                         Response<Bookmark> model) {
         Bookmark bookmark = bookmarkService.addBookmark(book, dto);
-        return model.setData(mapper.map(bookmark));
+        return model.setData(bookmark);
     }
 
-    @PostMapping("/{id}")
-    Response<BookmarkDTO> updateBookmark(@PathVariable Long id,
-                                         @Valid @RequestBody BookmarkDTO dto,
-                                         @AuthenticationPrincipal Identity Identity,
-                                         Response<BookmarkDTO> model) {
-        Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
+    @PostMapping("{id}")
+    @PreAuthorize("#bookmark.book.identity.username == principal.username")
+    Response<Bookmark> updateBookmark(@PathVariable("id") Bookmark bookmark,
+                                         @Valid @RequestBody BookmarkDto dto,
+                                         Response<Bookmark> model) {
         bookmark = bookmarkService.updateBookmark(bookmark, dto);
-        return model.setData(mapper.map(bookmark));
+        return model.setData(bookmark);
     }
 
-    @DeleteMapping("/{id}")
-    Response<BookmarkDTO> deleteBookmark(@PathVariable Long id,
-                                         @AuthenticationPrincipal Identity Identity,
-                                         Response<BookmarkDTO> model) {
-        Bookmark bookmark = bookmarkService.findOne(id).orElseThrow();
+    @DeleteMapping("{id}")
+    @PreAuthorize("#bookmark.book.identity.username == principal.username")
+    Response<Bookmark> deleteBookmark(@PathVariable("id") Bookmark bookmark,
+                                         Response<Bookmark> model) {
         bookmarkService.delete(bookmark);
-        return model.setData(mapper.map(bookmark));
+        return model.setData(bookmark);
     }
 
+    @PostMapping("{id}/pin")
+    @PreAuthorize("#bookmark.book.identity.username == principal.username")
+    Response<Bookmark> pinBookmark(@PathVariable("id") Bookmark bookmark,
+                                         Response<Bookmark> model) {
+        bookmark.setPined(!bookmark.isPined());
+        return model.setData(bookmarkService.save(bookmark));
+    }
 }

@@ -1,11 +1,9 @@
 package com.ohmynone.rest.service;
 
-import com.ohmynone.rest.dto.BookmarkDTO;
-import com.ohmynone.rest.dto.TagDTO;
+import com.ohmynone.rest.dto.BookmarkDto;
+import com.ohmynone.rest.dto.TagDto;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
-import com.ohmynone.rest.entity.BookmarkSearchData;
-import com.ohmynone.rest.entity.Tag;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.repository.BookmarkRepository;
 import org.springframework.data.domain.Page;
@@ -56,11 +54,11 @@ public class BookmarkService {
         save(bookmark);
     }
 
-    public Bookmark addBookmark(Book book, BookmarkDTO dto) {
+    public Bookmark addBookmark(Book book, BookmarkDto dto) {
         Bookmark bookmark = mapper.map(dto);
         bookmark.setBook(book);
         if (dto.getTags() != null) {
-            Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
+            Set<String> names = dto.getTags().stream().map(TagDto::getName).collect(Collectors.toSet());
             bookmark.setTags(tagService.addTags(book.getIdentity(), names));
         }
         save(bookmark);
@@ -68,9 +66,9 @@ public class BookmarkService {
         return bookmark;
     }
 
-    public Bookmark updateBookmark(Bookmark bookmark, BookmarkDTO dto) {
+    public Bookmark updateBookmark(Bookmark bookmark, BookmarkDto dto) {
         bookmark = mapper.map(dto, bookmark);
-        Set<String> names = dto.getTags().stream().map(TagDTO::getName).collect(Collectors.toSet());
+        Set<String> names = dto.getTags().stream().map(TagDto::getName).collect(Collectors.toSet());
         bookmark.setTags(tagService.addTags(bookmark.getBook().getIdentity(), names));
         save(bookmark);
         bookmarkSearchDataService.index(bookmark);

@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class Response<T> {
-    private boolean status;
+    private boolean status = true;
     private String message;
     private T data;
 

@@ -5,6 +5,7 @@ import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.repository.TagRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class TagService {
         return tagRepository.findById(id);
     }
 
-    public Set<Tag> findAllByIdentity(Identity identity) {
+    public List<Tag> findAllByIdentity(Identity identity) {
         return tagRepository.findAllByIdentityUidOrderByIdDesc(identity.getUid());
     }
 

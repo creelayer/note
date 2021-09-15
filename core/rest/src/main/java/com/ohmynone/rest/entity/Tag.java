@@ -1,5 +1,6 @@
 package com.ohmynone.rest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class Tag extends BaseEntity {
     private long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Identity identity;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "tag")

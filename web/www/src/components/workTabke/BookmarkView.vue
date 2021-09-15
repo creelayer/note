@@ -37,66 +37,6 @@
   </div>
 </template>
 
-<style scoped>
-
-.view {
-  padding: 24px 20px;
-  box-shadow: -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.15);
-  height: 100%;
-  width: 100%;
-  margin-bottom: -24px;
-}
-
-.body {
-  margin-top: 12px;
-}
-
-.mce-content-body {
-  min-height: 100px;
-  padding: 4px;
-}
-
-h3 i {
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: -10px;
-  color: #d0d0d0;
-}
-
-h1 i:hover {
-  color: #000000;
-}
-
-.tags {
-  position: relative;
-  z-index: -2;
-}
-
-.edit-title {
-  width: 100%;
-}
-
-.form-switch {
-  position: relative;
-  z-index: 0;
-  margin-top: -26px;
-  width: 136px;
-}
-
-.form-switch input {
-  cursor: pointer;
-  float: right;
-}
-
-.form-switch label {
-  float: left;
-  color: #d0d0d0;
-  font-size: 12px;
-  margin-top: 3px;
-}
-
-</style>
-
 <script>
 import InlineTags from "@/components/tags/Inline.vue";
 import Editor from '@tinymce/tinymce-vue'
@@ -126,7 +66,6 @@ export default {
       this.editBody = false;
       Rest.get('/v1/bookmark/' + bookmark.id)
           .then(res => {
-            console.log(res);
             this.bookmark = res.data;
             this.name = this.bookmark.name;
             this.body = this.bookmark.body;
@@ -138,7 +77,7 @@ export default {
     },
     saveData: Debounce(function () {
       let bookmark = {
-        bookId: this.bookmark.bookId,
+        bookId: this.bookmark.book.id,
         name: this.name,
         body: this.body,
         tags: this.tags
@@ -174,4 +113,64 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+
+.view {
+  padding: 24px 20px;
+  box-shadow: -0.5rem 0.5rem 1rem rgba(0, 0, 0, 0.02), inset 1px 0 0 rgba(0, 0, 0, 0.15);
+  height: 100%;
+  width: 100%;
+  margin-bottom: -24px;
+}
+
+.body {
+  margin-top: 12px;
+}
+
+/*.mce-content-body {*/
+/*  min-height: 100px;*/
+/*  padding: 4px;*/
+/*}*/
+
+h3 i {
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: -10px;
+  color: #d0d0d0;
+}
+
+h1 i:hover {
+  color: #000000;
+}
+
+/*.tags {*/
+/*  position: relative;*/
+/*  z-index: -2;*/
+/*}*/
+
+/*.edit-title {*/
+/*  width: 100%;*/
+/*}*/
+
+.form-switch {
+  position: relative;
+  z-index: 0;
+  margin-top: -26px;
+  width: 136px;
+}
+
+.form-switch input {
+  cursor: pointer;
+  float: right;
+}
+
+.form-switch label {
+  float: left;
+  color: #d0d0d0;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+</style>
 

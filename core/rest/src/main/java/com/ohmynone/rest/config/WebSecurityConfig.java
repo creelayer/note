@@ -1,7 +1,7 @@
 package com.ohmynone.rest.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ohmynone.rest.component.TokenFilter;
+import com.ohmynone.rest.component.TokenAccessFilter;
 import com.ohmynone.rest.dto.Response;
 import com.ohmynone.rest.pkg.user.component.CustomUserDetails;
 import com.ohmynone.rest.pkg.user.entity.Token;
@@ -11,6 +11,7 @@ import com.ohmynone.rest.pkg.user.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,22 +30,23 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     UserRepository userRepository;
 
-    private final TokenFilter tokenFilter;
+    private final TokenAccessFilter tokenAccessFilter;
     private final ObjectMapper objectMapper;
     private final TokenService tokenService;
 
     public WebSecurityConfig(TokenService tokenService,
                              UserRepository userRepository,
-                             TokenFilter tokenFilter,
+                             TokenAccessFilter tokenAccessFilter,
                              ObjectMapper objectMapper
     ) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
-        this.tokenFilter = tokenFilter;
+        this.tokenAccessFilter = tokenAccessFilter;
         this.objectMapper = objectMapper;
     }
 
@@ -70,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
-                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenAccessFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 

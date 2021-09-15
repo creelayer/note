@@ -30,7 +30,7 @@
 </template>
 
 <script>
-
+import Rest from "@/api/Rest"
 
 export default {
   name: "Inline",
@@ -82,8 +82,7 @@ export default {
       this.selectTag(tag ? tag : {id: null, name: this.word});
     },
     fetchTags: function () {
-      fetch('/v1/tag')
-          .then(res => res.json())
+      Rest.get('/v1/tag')
           .then(res => {
             this.availableTags = res.data;
             this.filteredTags = this.availableTags.filter(tag => !this._includes(tag)).slice(0, 10);

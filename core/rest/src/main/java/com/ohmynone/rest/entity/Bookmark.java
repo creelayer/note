@@ -19,9 +19,6 @@ public class Bookmark extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "book_id", insertable = false, updatable = false)
-    private long bookId;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Book book;
 
@@ -31,10 +28,13 @@ public class Bookmark extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
 
-    @JsonIgnore
+    @Column(nullable = false)
+    private boolean pined = false;
+
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Tag> tags = new HashSet<>();
 
+    @JsonIgnore
     @OneToOne(mappedBy = "bookmark", fetch = FetchType.EAGER)
     private BookmarkSearchData searchData;
 

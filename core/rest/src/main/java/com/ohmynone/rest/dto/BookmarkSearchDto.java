@@ -1,17 +1,19 @@
 package com.ohmynone.rest.dto;
 
+import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.util.SearchUtil;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class BookmarkSearch {
+public class BookmarkSearchDto {
     private Long bookId;
-    private String s;
+    private String search;
+    private Identity identity;
 
     public String getNormalizedText() {
-        return SearchUtil.normalize(s);
+        return SearchUtil.normalize(search);
     }
 
 }

@@ -1,9 +1,11 @@
 <template>
   <div v-bind:class="show?'show':''">
-    <div :key="index" v-for="(color,index) in colors" v-bind:class="'dot '+(color === current ? ' current':'')"
+    <div :key="index" v-for="(color,index) in colors" v-bind:class="'dot '+(color === current ? ' hide':'')"
          v-bind:style="'background-color:#'+color" v-on:click="choose(color)"
-    >
-    </div>
+    />
+    <div  v-bind:class="'dot current'"
+         v-bind:style="'background-color:#'+current" v-on:click="choose(current)"
+    />
   </div>
 </template>
 
@@ -25,6 +27,10 @@
 .show .dot {
   opacity: 1;
   display: block;
+}
+
+.hide.dot {
+  display: none;
 }
 
 .current {
