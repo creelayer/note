@@ -1,8 +1,8 @@
-package com.ohmynone.rest.pkg.user.entity;
+package com.ohmynone.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ohmynone.rest.pkg.user.util.TokenUtil;
+import com.ohmynone.user.util.TokenUtil;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 

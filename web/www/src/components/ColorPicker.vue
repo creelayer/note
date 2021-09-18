@@ -10,7 +10,7 @@
 </template>
 
 
-<style>
+<style scoped>
 
 .dot {
   float: left;
@@ -36,7 +36,6 @@
 .current {
   color: #FFFFFF;
   line-height: 18px;
-  font-weight: bold;
   padding-left: 1px;
   display: block;
   opacity: 1;
@@ -58,7 +57,7 @@ export default {
   data() {
     return {
       show: false,
-      colors: ['E5E4E4', '2ECC71', 'FFC300', 'FF5733', 'DE3163', 'DFFF00', '40E0D0', 'CCCCFF', '6495ED'],
+      colors: ['E5E4E4', '2ECC71', 'FFC300', 'FF5733', 'DE3163', 'DFFF00', 'fb5779', 'ff7511', '6495ED'],
       current: null
     }
   },

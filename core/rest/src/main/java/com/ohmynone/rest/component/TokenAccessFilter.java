@@ -1,9 +1,10 @@
 package com.ohmynone.rest.component;
 
 import com.ohmynone.rest.entity.Identity;
-import com.ohmynone.rest.pkg.user.entity.Token;
-import com.ohmynone.rest.pkg.user.repository.TokenRepository;
+import com.ohmynone.user.entity.Token;
 import com.ohmynone.rest.service.IdentityService;
+import com.ohmynone.user.service.TokenService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,24 +19,20 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class TokenAccessFilter extends OncePerRequestFilter {
 
     private static final String AUTHORIZATION = "Authorization";
 
-    private final TokenRepository tokenRepository;
+    private final TokenService tokenService;
     private final IdentityService identityService;
-
-    public TokenAccessFilter(TokenRepository tokenRepository, IdentityService identityService) {
-        this.tokenRepository = tokenRepository;
-        this.identityService = identityService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String access = request.getHeader(AUTHORIZATION).substring(7);
-        Token token = tokenRepository.findOneByAccess(access)
+        Token token = tokenService.findByAccess(access)
                 .orElseThrow(() -> new AccessDeniedException("Access denied"));
 
         if (token.isExpired()) {

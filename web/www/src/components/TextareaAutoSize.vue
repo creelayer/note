@@ -7,6 +7,9 @@
   width: 100%;
   border: none;
 }
+.h3{
+  font-size: 1.5em;
+}
 </style>
 
 <script>

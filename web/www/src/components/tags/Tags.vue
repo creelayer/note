@@ -1,4 +1,10 @@
 <template>
+  <input type="email"
+         class="form-control form-control-sm mb-2"
+         placeholder="search tag..."
+         v-model="model"
+         v-on:keyup="search(model)"
+         v-on:change="search(model)">
   <table class="table">
     <tbody>
     <tr :key="index" v-for="(tag, index) in tags">
@@ -50,13 +56,22 @@ export default {
       tags: [],
       editFromIndex: false,
       name: null,
+      model: '',
+      tagsOriginal: []
     }
   },
   methods: {
+    search: function (name) {
+      if (name.length === 0) {
+        this.tags = this.tagsOriginal;
+        return;
+      }
+      this.tags = this.tagsOriginal.filter(t => t.name.includes(name));
+    },
     fetchData: function () {
       Rest.get('/v1/tag')
           .then(res => {
-            this.tags = res.data;
+            this.tags = this.tagsOriginal = res.data;
           });
     },
     choose: function (id, color) {
@@ -70,7 +85,7 @@ export default {
       this.editFromIndex = tag.id;
       this.name = tag.name;
       this.$nextTick(() => {
-          document.getElementById("edit-"+tag.id).focus();
+        document.getElementById("edit-" + tag.id).focus();
       });
     },
     eventTitleChanged: function (event, tag) {

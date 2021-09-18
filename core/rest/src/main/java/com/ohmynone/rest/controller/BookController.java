@@ -3,13 +3,13 @@ package com.ohmynone.rest.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.ohmynone.rest.dto.BookDto;
 import com.ohmynone.rest.dto.BookSearchDto;
-import com.ohmynone.rest.dto.BookmarkSearchDto;
 import com.ohmynone.rest.dto.Response;
 import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.mapper.BookMapper;
 import com.ohmynone.rest.service.BookService;
 import com.ohmynone.rest.view.BookView;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,15 +20,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/book")
+@RequiredArgsConstructor
 public class BookController {
 
     private final BookService bookService;
     private final BookMapper mapper;
-
-    public BookController(BookService bookService, BookMapper mapper) {
-        this.bookService = bookService;
-        this.mapper = mapper;
-    }
 
     @GetMapping("")
     @JsonView({BookView.List.class})

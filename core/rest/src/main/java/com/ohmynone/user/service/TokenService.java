@@ -1,19 +1,22 @@
-package com.ohmynone.rest.pkg.user.service;
+package com.ohmynone.user.service;
 
-import com.ohmynone.rest.pkg.user.entity.Token;
-import com.ohmynone.rest.pkg.user.entity.User;
-import com.ohmynone.rest.pkg.user.repository.TokenRepository;
+import com.ohmynone.user.entity.Token;
+import com.ohmynone.user.entity.User;
+import com.ohmynone.user.repository.TokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TokenService {
 
-    protected TokenRepository tokenRepository;
+    protected final TokenRepository tokenRepository;
 
-    public TokenService(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
+    public Optional<Token> findByAccess(String access){
+        return tokenRepository.findOneByAccess(access);
     }
 
     public Token refresh(String refresh) throws EntityNotFoundException {

@@ -1,14 +1,34 @@
 <template>
-  <div class="d-grid gap-2">
-    <button v-on:click="showCreateFrom = true" class="btn btn-light mb-2" type="button">+ Add</button>
+  <!--  <div class="d-grid gap-2">-->
+  <!--    <button v-on:click="showCreateFrom = true" class="btn btn-light mb-2" type="button">+ Add</button>-->
+  <!--  </div>-->
+
+
+  <div class="d-flex">
+    <div class="w-100 border"> <a>Books list</a></div>
+    <div class="flex-shrink-1">
+
+      <div class="add-book" v-on:click="showCreateFrom = true">
+        <div class="add-book-box">
+          <svg class="Icon" focusable="false" viewBox="0 0 32 32">
+            <path
+                d="M26,14h-8V6c0-1.1-0.9-2-2-2l0,0c-1.1,0-2,0.9-2,2v8H6c-1.1,0-2,0.9-2,2l0,0c0,1.1,0.9,2,2,2h8v8c0,1.1,0.9,2,2,2l0,0c1.1,0,2-0.9,2-2v-8h8c1.1,0,2-0.9,2-2l0,0C28,14.9,27.1,14,26,14z"></path>
+          </svg>
+        </div>
+      </div>
+
+
+    </div>
   </div>
+
   <BookForm v-if="showCreateFrom"/>
 
   <ul class="books">
-    <li v-on:click="view(null)" v-bind:class="(!book ? ' border rounded-2 current':'')">
-      <a >All books</a>
+    <li v-on:click="view(null)" v-bind:class="'context-menu border '+(!book ? ' rounded-2 current':'')">
+      <a>Uncategorized</a>
     </li>
-    <li :key="book1.id" v-for="(book1, index) in books" v-on:click="view(book1)" v-bind:class="'context-menu '+(book && book1.id === book.id ? ' border rounded-2 current':'')">
+    <li :key="book1.id" v-for="(book1, index) in books" v-on:click="view(book1)"
+        v-bind:class="'context-menu border '+(book && book1.id === book.id ? ' rounded-2 current':'')">
       <a v-if="editFromIndex!==index">{{ book1.name }}</a>
 
       <div v-if="editFromIndex!==index" class="dropdown without-caret float-end">
@@ -36,7 +56,7 @@
       v-show="isModalVisible"
       @close="closeModal">
     <template v-slot:header>
-      Tag editor
+      <div class="float-start">Tag editor</div>
     </template>
     <template v-slot:body>
       <Tags ref="tags"/>
@@ -44,26 +64,6 @@
   </Modal>
 
 </template>
-
-
-<style scoped>
-.books {
-  list-style: none;
-  padding-left: 0;
-}
-
-.books > li {
-  padding: 5px 10px;
-  cursor: pointer;
-  color: #60717D;
-}
-
-.books li:hover {
-  color: #000;
-}
-
-</style>
-
 
 <script>
 import BookForm from "@/components/workTabke/BookForm";
@@ -116,4 +116,79 @@ export default {
 
 <style scoped>
 
+.w-100{
+  margin-right: 5px;
+  padding: 4px 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.add-book {
+  width: 100%;
+  align-items: center;
+  box-sizing: border-box;
+  color: #6f7782;
+  display: inline-flex;
+  text-align: center;
+  cursor: pointer;
+}
+
+.add-book-box {
+  border-radius: 6px;
+  height: 31px;
+  width: 30px;
+  margin: 0;
+  align-items: center;
+  border: 0 dashed #9ca6af;
+  box-sizing: border-box;
+  color: #6f7782;
+  display: flex;
+  fill: #9ca6af;
+  justify-content: center;
+  position: relative;
+}
+
+.Icon {
+  flex: 0 0 auto;
+  height: 16px;
+  width: 16px;
+}
+
+
+.books {
+  list-style: none;
+  padding-left: 0;
+}
+
+.border{
+  border-color: #fff !important;
+}
+
+.border.current{
+  border-color: #14aaf5 !important;
+  background-color: #edf8ff;
+}
+
+.books > li {
+  padding: 5px 10px;
+  cursor: pointer;
+  color: #60717D;
+}
+
+.books li:hover {
+  color: #000;
+}
+
+.books a span {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+li.book-form {
+  padding: 0;
+}
+
+.modal-body table {
+  overflow-y: scroll;
+}
 </style>

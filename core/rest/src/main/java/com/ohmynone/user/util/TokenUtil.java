@@ -1,4 +1,4 @@
-package com.ohmynone.rest.pkg.user.util;
+package com.ohmynone.user.util;
 
 import java.util.Random;
 

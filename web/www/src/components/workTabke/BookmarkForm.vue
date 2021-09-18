@@ -6,8 +6,13 @@
       </ul>
     </div>
 
-    <form class="mb-3">
-      <input v-model="name" type="text" class="form-control" placeholder="Enter bookmark name" v-if="isInline">
+    <form class="">
+
+
+      <input v-model="name" type="text" autofocus class="form-control inline" placeholder="Write new bookmark name"
+             v-if="isInline" v-on:blur="submit">
+
+
       <div class="mb-3" v-if="!isInline">
         <input v-model="name" type="text" class="form-control" placeholder="Enter bookmark name">
       </div>
@@ -17,7 +22,6 @@
       <div class="mb-3" v-if="!isInline">
         <textarea v-model="body" class="form-control" placeholder="Enter book body" rows="10"/>
       </div>
-      <button type="submit" class="btn-primary btn-sm mt-1" v-on:click="submit">Save</button>
 
     </form>
 
@@ -26,6 +30,17 @@
 </template>
 <style scoped>
 
+.inline {
+  border: none;
+  font-size: 1.1em;
+  padding-left: 0;
+  outline: none;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
 
 </style>
 <script>
@@ -64,7 +79,7 @@ export default {
       let _that = this;
       this.errors = [];
       if (!this.name) {
-        this.errors.push('Требуется указать имя.');
+        return;
       }
 
       if (this.errors.length !== 0) {

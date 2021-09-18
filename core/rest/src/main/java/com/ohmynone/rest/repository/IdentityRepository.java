@@ -1,7 +1,6 @@
 package com.ohmynone.rest.repository;
 
 import com.ohmynone.rest.entity.Identity;
-import com.ohmynone.rest.pkg.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

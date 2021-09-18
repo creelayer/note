@@ -3,11 +3,12 @@ package com.ohmynone.rest.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohmynone.rest.component.TokenAccessFilter;
 import com.ohmynone.rest.dto.Response;
-import com.ohmynone.rest.pkg.user.component.CustomUserDetails;
-import com.ohmynone.rest.pkg.user.entity.Token;
-import com.ohmynone.rest.pkg.user.entity.User;
-import com.ohmynone.rest.pkg.user.repository.UserRepository;
-import com.ohmynone.rest.pkg.user.service.TokenService;
+import com.ohmynone.user.component.CustomUserDetails;
+import com.ohmynone.user.entity.Token;
+import com.ohmynone.user.entity.User;
+import com.ohmynone.user.service.TokenService;
+import com.ohmynone.user.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -29,26 +30,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    UserRepository userRepository;
-
+    private final UserService userService;
     private final TokenAccessFilter tokenAccessFilter;
     private final ObjectMapper objectMapper;
     private final TokenService tokenService;
-
-    public WebSecurityConfig(TokenService tokenService,
-                             UserRepository userRepository,
-                             TokenAccessFilter tokenAccessFilter,
-                             ObjectMapper objectMapper
-    ) {
-        this.tokenService = tokenService;
-        this.userRepository = userRepository;
-        this.tokenAccessFilter = tokenAccessFilter;
-        this.objectMapper = objectMapper;
-    }
 
     @Bean
     public PasswordEncoder encoder() {
@@ -91,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new CustomUserDetails(userRepository);
+        return new CustomUserDetails(userService);
     }
 
 }

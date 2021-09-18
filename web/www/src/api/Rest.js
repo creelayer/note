@@ -1,5 +1,5 @@
-// import Auth from "@/api/Auth"
-// import Router from "@/router/index"
+import Auth from "@/api/Auth"
+import Router from "@/router/index"
 
 const METHOD_GET = 'GET';
 const METHOD_POST = 'POST';
@@ -39,12 +39,12 @@ function del(url) {
 
 function request(method, url, body) {
 
-    // if (this.getAccessToken() == null) {
-    //     Router.replace("/login");
-    //     return Promise.reject("Token expired");
-    // }
+    if (this.getAccessToken() == null) {
+        Router.replace("/login");
+        return Promise.reject("Token expired");
+    }
 
-    // let that = this;
+    let that = this;
     const requestOptions = {
         method: method,
         headers: {
@@ -60,16 +60,16 @@ function request(method, url, body) {
             return response;
         }
 
-        // if (response.status === 401) {
-        //     Auth.refresh(that.getRefreshToken()).then(token => {
-        //         that.token = token;
-        //         return this.request(method, url);
-        //     }).catch(() => {
-        //         that.token = null;
-        //         Router.replace("/login");
-        //         return Promise.reject("Token expired");
-        //     });
-        // }
+        if (response.status === 401) {
+            Auth.refresh(that.getRefreshToken()).then(token => {
+                that.token = token;
+                return this.request(method, url);
+            }).catch(() => {
+                that.token = null;
+                Router.replace("/login");
+                return Promise.reject("Token expired");
+            });
+        }
 
         throw Error(response.statusText);
     }

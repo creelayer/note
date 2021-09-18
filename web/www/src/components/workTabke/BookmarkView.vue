@@ -9,7 +9,7 @@
 
       <TextareaAutoSize v-if="editTile" v-model="name" v-on:blur="eventTitleChanged" ref="titleEditAutoSize"/>
 
-      <InlineTags :bookmark="bookmark" :on-change="eventTagsChanged" :editable="true"/>
+      <InlineTags :book="bookmark.book" :tags="bookmark.tags" :on-change="eventTagsChanged" :editable="true"/>
 
       <div class="form-check form-switch float-end" v-on:click="actionEditBody" v-if="body !==null">
         <label class="form-check-label" for="flexSwitchCheckDefault">Edit mode</label>
@@ -128,19 +128,18 @@ export default {
   margin-top: 12px;
 }
 
-/*.mce-content-body {*/
-/*  min-height: 100px;*/
-/*  padding: 4px;*/
-/*}*/
+h3{
+  font-size: 1.5em;
+}
 
 h3 i {
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   margin-top: -10px;
   color: #d0d0d0;
 }
 
-h1 i:hover {
+h3 i:hover {
   color: #000000;
 }
 

@@ -6,8 +6,7 @@
       </ul>
     </div>
     <div>
-      <input v-model="name" type="text" class="form-control" placeholder="Enter book name">
-      <button type="submit" class="btn btn-primary btn-sm mt-1" v-on:click="submit">Save</button>
+      <input v-model="name" type="text" class="form-control" placeholder="Enter book name" v-on:blur="submit">
     </div>
   </div>
 </template>

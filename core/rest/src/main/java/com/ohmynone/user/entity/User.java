@@ -1,4 +1,4 @@
-package com.ohmynone.rest.pkg.user.entity;
+package com.ohmynone.user.entity;
 
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;

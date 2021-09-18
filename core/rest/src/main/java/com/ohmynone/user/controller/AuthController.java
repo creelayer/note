@@ -1,7 +1,7 @@
-package com.ohmynone.rest.pkg.user.controller;
+package com.ohmynone.user.controller;
 
-import com.ohmynone.rest.pkg.user.entity.Token;
-import com.ohmynone.rest.pkg.user.service.TokenService;
+import com.ohmynone.user.entity.Token;
+import com.ohmynone.user.service.TokenService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

@@ -1,12 +1,19 @@
 <template>
   <ul class="tags">
-    <li class="tag" style="color: #60717D">
-      {{ bookmark.book.name }}
+    <li class="tag me-3" style="color: #60717D">
+      <div class="round">{{ book.name }}</div>
     </li>
-    <li :key="tag" v-for="tag in currentTags" :style="'background-color:#'+tag.color"
-        class="tag">
-      {{ tag.name }}
-      <i class="bi bi-x-lg" v-on:click="deleteTag(tag)" v-if="editable"></i>
+
+    <li :key="tag" v-for="tag in currentTags" class="tag"  v-bind:title="tag.name">
+      <svg v-if="!editable" class="Icon" :style="(editable ? '':'fill:#'+tag.color)" focusable="false"
+           viewBox="0 0 32 32">
+        <path
+            d="M29.2,14.3L18.7,3.8C17.6,2.6,16,2,14.4,2H7.3C4.4,2,2,4.4,2,7.3v7.1c0,1.6,0.6,3.2,1.8,4.3l10.5,10.5c1.2,1.2,2.8,1.8,4.3,1.8c1.6,0,3.1-0.6,4.3-1.8l6.3-6.3C31.6,20.5,31.6,16.7,29.2,14.3z M10,13c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3S11.7,13,10,13z"></path>
+      </svg>
+      <div class="round" v-if="editable" :style="'background-color:#'+tag.color">
+        <span >{{ tag.name }}</span>
+        <i class="bi bi-x-lg" v-on:click="deleteTag(tag)"></i>
+      </div>
     </li>
 
     <li class="tag-select">
@@ -26,7 +33,6 @@
       <a href="#" v-on:click="selectTag(tag)">{{ tag.name }}</a>
     </li>
   </ul>
-
 </template>
 
 <script>
@@ -36,12 +42,13 @@ export default {
   name: "Inline",
   props: {
     editable: null,
-    bookmark: null,
+    book: null,
+    tags: null,
     onChange: Function
   },
   watch: {
-    bookmark: function (o) {
-      this.currentTags = o.tags;
+    tags: function (o) {
+      this.currentTags = o;
       this.showAddForm = false;
     }
   },
@@ -49,7 +56,7 @@ export default {
     return {
       showAddForm: false,
       word: null,
-      currentTags: this.bookmark.tags,
+      currentTags: this.tags ? this.tags : [],
       availableTags: [],
       filteredTags: []
     }
@@ -129,16 +136,22 @@ export default {
   overflow: hidden;
   list-style: none;
 }
-
-.tags .tag {
+.tags .tag{
   margin-right: 6px;
-  font-weight: normal;
-  background-color: #e5e4e4;
   float: left;
+}
+.tags .tag .round {
+  font-weight: normal;
   padding: 1px 6px;
-  color: #FFFFFF;;
   font-size: 11px;
   border-radius: 8px;
+  background-color: #e5e4e4;
+  color: black;
+}
+
+.tags .tag .Icon{
+  width: 16px;
+  margin-top: -2px;
 }
 
 .tags .tag.add {

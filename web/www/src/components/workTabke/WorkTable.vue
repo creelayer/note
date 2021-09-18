@@ -44,11 +44,6 @@ export default {
 
 <style>
 
-body{
-  font-size: 14px;
-  font-family: Sans-serif,sans-serif;
-}
-
 .workspace {
   padding-top: 56px;
   height: 100%;

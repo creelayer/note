@@ -6,6 +6,7 @@ import com.ohmynone.rest.entity.Book;
 import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.service.BookmarkService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,15 +15,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("v1/bookmark")
+@RequiredArgsConstructor
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
     private final BookmarkMapper mapper;
-
-    public BookmarkController(BookmarkService bookmarkService, BookmarkMapper mapper) {
-        this.bookmarkService = bookmarkService;
-        this.mapper = mapper;
-    }
 
     @GetMapping("{id}")
     @PreAuthorize("#bookmark.book.identity.username == principal.username")

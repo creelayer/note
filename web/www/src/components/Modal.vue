@@ -19,14 +19,14 @@
         </slot>
       </section>
 
-      <footer class="modal-footer">
-        <slot name="footer">
-        </slot>
-        <button
-            type="button"
-            class="btn btn-secondary"
-            @click="close">Close</button>
-      </footer>
+<!--      <footer class="modal-footer">-->
+<!--        <slot name="footer">-->
+<!--        </slot>-->
+<!--        <button-->
+<!--            type="button"-->
+<!--            class="btn btn-secondary"-->
+<!--            @click="close">Close</button>-->
+<!--      </footer>-->
     </div>
   </div>
 </template>
@@ -88,7 +88,7 @@ export default {
 
 .modal-body {
   position: relative;
-  padding: 20px 10px;
+  padding: 10px 10px;
 }
 
 .btn-close {

@@ -1,11 +1,24 @@
 <template>
 
-
-  <div class="d-grid gap-2">
-    <button v-on:click="showCreateFrom = true" :disabled="!book" class="btn btn-light mb-2" type="button">+ Add</button>
+  <div class="add-bookmark mb-2" v-on:click="showCreateFrom = !!book">
+    <div class="add-bookmark-box">
+      <svg class="Icon" focusable="false" viewBox="0 0 32 32">
+        <path
+            d="M26,14h-8V6c0-1.1-0.9-2-2-2l0,0c-1.1,0-2,0.9-2,2v8H6c-1.1,0-2,0.9-2,2l0,0c0,1.1,0.9,2,2,2h8v8c0,1.1,0.9,2,2,2l0,0c1.1,0,2-0.9,2-2v-8h8c1.1,0,2-0.9,2-2l0,0C28,14.9,27.1,14,26,14z"></path>
+      </svg>
+    </div>
   </div>
 
-  <BookmarkForm v-if="showCreateFrom" :book="book" :is-inline="true"/>
+  <div class="" v-if="showCreateFrom">
+    <div class=" rounded-3 p-2 mb-1 bookmark">
+      <BookmarkForm :book="book" :is-inline="true"/>
+
+      <div class="info">
+        <InlineTags :book="book"/>
+      </div>
+
+    </div>
+  </div>
 
 
   <div v-if="bookmarks.length === 0 " class="text-center text-muted mt-4">
@@ -14,11 +27,12 @@
 
   <div class="context-menu" :key="bookmark.id" v-for="(bookmark) in bookmarks">
     <div v-on:click="view(bookmark)"
-         class="border rounded-3  p-2 mb-1  bookmark">
+         class=" rounded-3  p-2 mb-1  bookmark"
+         v-bind:class="(currentBookmark && currentBookmark.id === bookmark.id ? 'active':'')">
       <a>{{ bookmark.name }}</a>
 
       <div class="info">
-        <InlineTags :bookmark="bookmark"/>
+        <InlineTags :tags="bookmark.tags" :book="bookmark.book"/>
       </div>
 
     </div>
@@ -39,11 +53,53 @@
 
 <style scoped>
 
+.add-bookmark {
+  width: 100%;
+  align-items: center;
+  box-sizing: border-box;
+  color: #6f7782;
+  display: inline-flex;
+  text-align: center;
+  cursor: pointer;
+}
+
+.add-bookmark-box {
+  border-radius: 6px;
+  height: 40px;
+  width: 100%;
+  margin: 0 0 4px 0;
+  align-items: center;
+  border: 2px dashed #9ca6af;
+  box-sizing: border-box;
+  color: #6f7782;
+  display: flex;
+  fill: #9ca6af;
+  justify-content: center;
+  position: relative;
+}
+
+.Icon {
+  flex: 0 0 auto;
+  height: 16px;
+  width: 16px;
+}
+
+
 .bookmark {
   display: block;
   cursor: pointer;
   min-height: 70px;
   font-size: 0.95em;
+  border: 1px solid #dee2e6;
+}
+
+.bookmark:hover {
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+}
+
+.bookmark.active {
+  background-color: #edf8ff;
+  border-color: #14aaf5;
 }
 
 .bi-pin-angle {
@@ -92,6 +148,7 @@ export default {
   components: {BookmarkForm, InlineTags},
   data() {
     return {
+      currentBookmark: null,
       showCreateFrom: false,
       editIndex: null,
       bookmarks: [],
@@ -104,6 +161,7 @@ export default {
   },
   methods: {
     view: function (bookmark) {
+      this.currentBookmark = bookmark;
       this.$parent.viewBookmark(bookmark);
     },
     remove: function (bookmark) {
