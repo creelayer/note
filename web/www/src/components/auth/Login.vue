@@ -57,6 +57,13 @@
         </form>
 
 
+        <div class="">
+          Don't have an account?
+          <a href="/create-account">Sign up</a>
+        </div>
+
+
+
       </div>
     </div>
 
@@ -153,6 +160,8 @@ export default {
       Auth.auth(this.username, this.password).then(data => {
         Api.token = data.data;
         Router.replace("/")
+      }).catch(data => {
+        console.log(data);
       })
     }
   }

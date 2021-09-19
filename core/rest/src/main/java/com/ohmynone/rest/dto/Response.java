@@ -1,19 +1,16 @@
 package com.ohmynone.rest.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
-@Getter
-@Setter
-@Accessors(chain = true)
 public class Response<T> {
-    private boolean status = true;
-    private String message;
-    private T data;
+
+    public boolean status = true;
+    public String message;
+    public T data;
+
+    public Response(String message){
+        this.message = message;
+    }
 
     public Response(T data){
-        this.status = false;
         this.data = data;
     }
 }

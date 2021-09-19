@@ -7,6 +7,7 @@ import com.ohmynone.rest.entity.Bookmark;
 import com.ohmynone.rest.mapper.BookmarkMapper;
 import com.ohmynone.rest.service.BookmarkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,41 +24,37 @@ public class BookmarkController {
 
     @GetMapping("{id}")
     @PreAuthorize("#bookmark.book.identity.username == principal.username")
-    Response<Bookmark> view(@PathVariable("id") Bookmark bookmark, Response<Bookmark> model) {
-        return model.setData(bookmark);
+    ResponseEntity<?> view(@PathVariable("id") Bookmark bookmark) {
+        return ResponseEntity.ok(new Response<>(bookmark));
     }
 
     @PostMapping("add/{id}")
     @PreAuthorize("#book.identity.username == principal.username")
-    Response<Bookmark> createBookmark(@PathVariable("id") Book book,
-                                         @Valid @RequestBody BookmarkDto dto,
-                                         Response<Bookmark> model) {
+    ResponseEntity<?> createBookmark(@PathVariable("id") Book book,
+                                         @Valid @RequestBody BookmarkDto dto) {
         Bookmark bookmark = bookmarkService.addBookmark(book, dto);
-        return model.setData(bookmark);
+        return ResponseEntity.ok(new Response<>(bookmark));
     }
 
     @PostMapping("{id}")
     @PreAuthorize("#bookmark.book.identity.username == principal.username")
-    Response<Bookmark> updateBookmark(@PathVariable("id") Bookmark bookmark,
-                                         @Valid @RequestBody BookmarkDto dto,
-                                         Response<Bookmark> model) {
+    ResponseEntity<?> updateBookmark(@PathVariable("id") Bookmark bookmark,
+                                         @Valid @RequestBody BookmarkDto dto) {
         bookmark = bookmarkService.updateBookmark(bookmark, dto);
-        return model.setData(bookmark);
+        return ResponseEntity.ok(new Response<>(bookmark));
     }
 
     @DeleteMapping("{id}")
     @PreAuthorize("#bookmark.book.identity.username == principal.username")
-    Response<Bookmark> deleteBookmark(@PathVariable("id") Bookmark bookmark,
-                                         Response<Bookmark> model) {
+    ResponseEntity<?> deleteBookmark(@PathVariable("id") Bookmark bookmark) {
         bookmarkService.delete(bookmark);
-        return model.setData(bookmark);
+        return ResponseEntity.ok(new Response<>(bookmark));
     }
 
     @PostMapping("{id}/pin")
     @PreAuthorize("#bookmark.book.identity.username == principal.username")
-    Response<Bookmark> pinBookmark(@PathVariable("id") Bookmark bookmark,
-                                         Response<Bookmark> model) {
+    ResponseEntity<?> pinBookmark(@PathVariable("id") Bookmark bookmark) {
         bookmark.setPined(!bookmark.isPined());
-        return model.setData(bookmarkService.save(bookmark));
+        return ResponseEntity.ok(new Response<>(bookmark));
     }
 }

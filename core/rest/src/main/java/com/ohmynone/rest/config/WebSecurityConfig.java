@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -51,6 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/refresh").permitAll()
+                .antMatchers("/register").anonymous()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -69,7 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private void loginFailureHandler(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType("application/json");
-        objectMapper.writeValue(response.getWriter(), new Response<>("Invalid username or password"));
+        objectMapper.writeValue(response.getWriter(), ResponseEntity
+                .badRequest()
+                .body(new Response<>("Invalid username or password")));
     }
 
     private void loginSuccessHandler(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {

@@ -7,7 +7,7 @@ const METHOD_DELETE = 'DELETE';
 
 export default {
     token: {
-        access_token: '8PisxkkZcIHiZQR5tCmnn5uBBvppYwNFzw4vBZT0VwxfYILVenLEailaC',
+        access_token: null,//'8PisxkkZcIHiZQR5tCmnn5uBBvppYwNFzw4vBZT0VwxfYILVenLEailaC',
         refresh_token: null
     },
     getRefreshToken: function () {
@@ -61,6 +61,8 @@ function request(method, url, body) {
         }
 
         if (response.status === 401) {
+            // console.log(that)
+            // console.log(Auth)
             Auth.refresh(that.getRefreshToken()).then(token => {
                 that.token = token;
                 return this.request(method, url);

@@ -1,22 +1,16 @@
 export default {
     auth,
+    register,
     refresh,
 };
 
 function _fetch(url, data) {
-    let formBody = [];
-    for (let property in data) {
-        let encodedKey = encodeURIComponent(property);
-        let encodedValue = encodeURIComponent(data[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
-    }
-
     return fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            'Content-Type': 'application/json'
         },
-        body: formBody.join("&")
+        body: JSON.stringify(data)
     }).then(res => {
         if (!res.ok) {
             return Promise.reject(res.statusText)
@@ -32,7 +26,36 @@ function auth(username, password) {
         username: username,
         password: password
     };
-    return _fetch('/auth/token', data);
+
+    let formBody = [];
+    for (let property in data) {
+        let encodedKey = encodeURIComponent(property);
+        let encodedValue = encodeURIComponent(data[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+    }
+
+    return fetch('/auth/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody.join("&")
+    }).then(res => {
+        if (!res.ok) {
+            return Promise.reject(res.json())
+        }
+        return res;
+    }).then(res => res.json());
+}
+
+function register(username, password) {
+    let data = {
+        client_id: "register",
+        grant_type: "",
+        username: username,
+        password: password
+    };
+    return _fetch('/register', data);
 }
 
 function refresh(refreshToken) {

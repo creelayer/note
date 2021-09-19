@@ -7,12 +7,12 @@ import com.ohmynone.rest.entity.Tag;
 import com.ohmynone.rest.mapper.TagMapper;
 import com.ohmynone.rest.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("v1/tag")
@@ -23,16 +23,15 @@ public class TagController {
     private final TagMapper mapper;
 
     @GetMapping("")
-    Response<List<TagDto>> index(@AuthenticationPrincipal Identity identity, Response<List<TagDto>> model) {
-        return model.setData(mapper.map(tagService.findAllByIdentity(identity)));
+    ResponseEntity<?> index(@AuthenticationPrincipal Identity identity) {
+        return ResponseEntity.ok(new Response<>(mapper.map(tagService.findAllByIdentity(identity))));
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("#tag.identity.username == principal.username")
-    Response<TagDto> updateTag(@PathVariable("id") Tag tag,
-                                @Valid @RequestBody TagDto dto,
-                                Response<TagDto> model) {
+    ResponseEntity<?> updateTag(@PathVariable("id") Tag tag,
+                                @Valid @RequestBody TagDto dto) {
         tag = mapper.map(dto, tag);
-        return model.setData(mapper.map(tagService.save(tag)));
+        return ResponseEntity.ok(new Response<>(mapper.map(tagService.save(tag))));
     }
 }

@@ -2,12 +2,14 @@ package com.ohmynone.rest.service;
 
 import com.ohmynone.rest.entity.Identity;
 import com.ohmynone.rest.repository.IdentityRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
-public class IdentityService  {
+public class IdentityService {
 
     protected IdentityRepository identityRepository;
 
@@ -19,7 +21,12 @@ public class IdentityService  {
         return identityRepository
                 .findByUid(uuid)
                 .orElseGet(() -> {
-                    return identityRepository.save(new Identity(uuid));
+                    try {
+                        return identityRepository.save(new Identity(uuid));
+                    } catch (DataIntegrityViolationException e) {
+                        return identityRepository.findByUid(uuid)
+                                .orElseThrow(() -> new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage())));
+                    }
                 });
     }
 }

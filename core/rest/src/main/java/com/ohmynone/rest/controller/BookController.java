@@ -10,8 +10,8 @@ import com.ohmynone.rest.mapper.BookMapper;
 import com.ohmynone.rest.service.BookService;
 import com.ohmynone.rest.view.BookView;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,40 +28,31 @@ public class BookController {
 
     @GetMapping("")
     @JsonView({BookView.List.class})
-    Response<Page<Book>> index(@Valid BookSearchDto filter,
-                                  Pageable pageable,
-                                  @AuthenticationPrincipal Identity identity,
-                                  Response<Page<Book>> model
+    ResponseEntity<?> index(@Valid BookSearchDto filter,
+                            Pageable pageable,
+                            @AuthenticationPrincipal Identity identity
     ) {
         filter.setIdentity(identity);
-        return model.setData(bookService.search(filter, pageable));
+        return ResponseEntity.ok(new Response<>(bookService.search(filter, pageable)));
     }
 
     @PostMapping("")
-    Response<Book> createBook(@Valid @RequestBody BookDto dto,
-                                 @AuthenticationPrincipal Identity identity,
-                                 Response<Book> model
-    ) {
+    ResponseEntity<?> createBook(@Valid @RequestBody BookDto dto, @AuthenticationPrincipal Identity identity) {
         Book book = mapper.map(dto);
         book.setIdentity(identity);
-        return model.setData(bookService.save(book));
+        return ResponseEntity.ok(new Response<>(bookService.save(book)));
     }
 
     @PostMapping("/{id}")
     @PreAuthorize("#book.identity.username == principal.username")
-    Response<Book> updateBook(@PathVariable("id") Book book,
-                                 @Valid @RequestBody BookDto dto,
-                                 Response<Book> model
-    ) {
+    ResponseEntity<?> updateBook(@PathVariable("id") Book book, @Valid @RequestBody BookDto dto) {
         book = mapper.map(dto, book);
-        return model.setData(bookService.save(book));
+        return ResponseEntity.ok(new Response<>(bookService.save(book)));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("#book.identity.username == principal.username")
-    Response<Book> deleteBook(@PathVariable("id") Book book,
-                                 Response<Book> model
-    ) {
-        return model.setData(bookService.delete(book));
+    ResponseEntity<?> deleteBook(@PathVariable("id") Book book) {
+        return ResponseEntity.ok(new Response<>(bookService.delete(book)));
     }
 }

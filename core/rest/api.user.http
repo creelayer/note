@@ -2,3 +2,13 @@ POST http://localhost:9090/auth/token
 Content-Type: application/x-www-form-urlencoded
 
 username=q@q.com&password=q
+
+###
+
+POST http://localhost:9090/register
+Content-Type: application/json
+
+{
+  "username": "test2@test.com",
+  "password": "test@test.com"
+}

@@ -1,5 +1,6 @@
 package com.ohmynone.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,6 +23,7 @@ public class User implements UserDetails  {
     @Column(length = 100)
     public String username;
 
+    @JsonIgnore
     @Column(length = 100)
     public String password;
 

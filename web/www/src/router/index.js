@@ -2,6 +2,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import WorkTable from "@/components/workTabke/WorkTable";
 import Tags from "@/components/tags/Tags";
 import Login from "@/components/auth/Login";
+import Register from "@/components/auth/Register";
 
 const routes = [
     {
@@ -18,6 +19,11 @@ const routes = [
         path: "/login",
         name: "Login",
         component: Login
+    },
+    {
+        path: "/create-account",
+        name: "Register",
+        component: Register
     }
 ];
 
